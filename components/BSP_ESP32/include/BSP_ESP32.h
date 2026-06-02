@@ -9,9 +9,9 @@ para poder llevar a cabo la aplicación
 
 #include <stdbool.h>
 #include <stdint.h>
-// MAPEOS/MASCARA (hardware específico de mi ESP32)
+// MAPEOS/MASCARAS (hardware específico de mi ESP32) debe usar HAL
 #define BTN1   (1<<18)
-#define BTN2   (1<<19)b
+#define BTN2   (1<<19)
 
 #define LED_R  (1<<12)
 #define LED_G  (1<<13)
