@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-//Manda a llamar a la capa BSP
+//Manda a llamar a la capa BSP o HAL
 #include "BSP_ESP32.h"
 #include "../BSP_ESP32.c"
 
