@@ -102,7 +102,7 @@ uint8_t gpio_toggle(uint8_t gpio_num){
 		TOGGLE_OUTPUT_BITS(REG_BIT_GPIO_X(gpio_num));
 		return READ_OUTPUT_PIN(gpio_num);
 	}
-	return 2;
+	return 0;
 }
 
 

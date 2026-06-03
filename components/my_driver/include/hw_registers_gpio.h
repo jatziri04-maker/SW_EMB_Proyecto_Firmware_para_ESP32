@@ -169,8 +169,7 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 	((((int8_t)gpio_num) >= 0 	&& (gpio_num) <= 19) || \
 	 ((gpio_num) >= 21 	&& (gpio_num) <= 23) || \
 	 ((gpio_num) >= 25 	&& (gpio_num) <= 27) || \
-	 ((gpio_num) >= 32 	&& (gpio_num) <= 33) || \
-	 ((gpio_num) >= 37 	&& (gpio_num) <= 38))
+	 ((gpio_num) >= 32 	&& (gpio_num) <= 33))
 // Nota: GPIOs 34, 35, 36 y 39 solo pueden ser usados como entradas.
 
 
