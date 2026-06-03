@@ -183,17 +183,17 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 
 
 // Macro - Funciones para poner en 1 o 0 bits del registro REG_GPIO_ENABLE:
-#define SET_GPIO_ENABLE(bits)		(*REG_GPIO_ENABLE |= (bits))
-#define CLEAR_GPIO_ENABLE(bits)		(*REG_GPIO_ENABLE &= ~(bits))
+#define SET_GPIO_ENABLE_BITS(bits)		(*REG_GPIO_ENABLE |= (bits))
+#define CLEAR_GPIO_ENABLE_BITS(bits)		(*REG_GPIO_ENABLE &= ~(bits))
 
-#define SET_OUTPUT_ENABLE(bits)		(SET_GPIO_ENABLE(bits))
-#define SET_INPUT_ENABLE(bits)		(CLEAR_GPIO_ENABLE(bits))
+#define SET_OUTPUT_ENABLE_BITS(bits)	(SET_GPIO_ENABLE_BITS(bits))
+#define SET_INPUT_ENABLE_BITS(bits)		(CLEAR_GPIO_ENABLE_BITS(bits))
 
 
 // Macro - Funciones para poner en 1 o 0 bits del registro REG_GPIO_OUT:
-#define SET_OUTPUT(bits)			(*REG_GPIO_OUT |= (bits))
-#define CLEAR_OUTPUT(bits)			(*REG_GPIO_OUT &= ~(bits))
-#define TOGGLE_OUTPUT(bits)			(*REG_GPIO_OUT ^= (bits))
+#define SET_OUTPUT_BITS(bits)		(*REG_GPIO_OUT |= (bits))
+#define CLEAR_OUTPUT_BITS(bits)		(*REG_GPIO_OUT &= ~(bits))
+#define TOGGLE_OUTPUT_BITS(bits)	(*REG_GPIO_OUT ^= (bits))
 
 
 // Macro - Funciones para leer registros:
@@ -203,13 +203,13 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 #define READ_REG(hwreg32)				(*hwreg32)
 #define READ_REG_BIT(hwreg32, bit)		(READ_REG(hwreg32) & bit)
 
-#define READ_INPUT(gpio_num)								\
+#define READ_INPUT_PIN(gpio_num)								\
 	(READ_REG_BIT(											\
 		((gpio_num <= 31) ? REG_GPIO_IN : REG_GPIO_IN1),	\
 		REG_BIT_GPIO_X(gpio_num)							\
 	))														\
 	
-#define READ_OUTPUT(gpio_num)	\
+#define READ_OUTPUT_PIN(gpio_num)	\
 	(READ_REG_BIT(REG_GPIO_OUT, REG_BIT_GPIO_X(gpio_num)))
 
 
@@ -239,6 +239,9 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 
 /****************************************************************************/
 // **** Otras constantes:
+
+#define GPIO_INPUT	0
+#define GPIO_OUTPUT	1
 
 #define INPUT_NO_PULL_MODE	0
 #define INPUT_PULLUP_MODE 	1

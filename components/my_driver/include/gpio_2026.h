@@ -23,6 +23,7 @@ void gpio_config_in_bits(uint32_t gpio_bits, uint8_t pull_mode);
 // Funciones para leer y escribir en pines GPIO compatibles:
 uint8_t gpio_read(uint8_t gpio_num);
 void	gpio_write(uint8_t gpio_num, uint8_t state);
+uint8_t	gpio_toggle(uint8_t gpio_num);
 
 
 

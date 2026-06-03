@@ -9,8 +9,8 @@
 
 void gpio_config_out(uint8_t gpio_num){
 	if(VALID_GPIO_OUTPUT(gpio_num)){
-		SET_OUTPUT_ENABLE(REG_BIT_GPIO_X(gpio_num));
-		CLEAR_OUTPUT(REG_BIT_GPIO_X(gpio_num));
+		SET_OUTPUT_ENABLE_BITS(REG_BIT_GPIO_X(gpio_num));
+		CLEAR_OUTPUT_BITS(REG_BIT_GPIO_X(gpio_num));
 	}
 	return;
 }
@@ -23,8 +23,8 @@ void gpio_config_out_bits(uint32_t gpio_bits){
 			return;
 	}
 	
-	SET_OUTPUT_ENABLE(gpio_bits);
-	CLEAR_OUTPUT(gpio_bits);
+	SET_OUTPUT_ENABLE_BITS(gpio_bits);
+	CLEAR_OUTPUT_BITS(gpio_bits);
 	
 	return;
 }
@@ -35,7 +35,7 @@ void gpio_config_out_bits(uint32_t gpio_bits){
 void gpio_config_in(uint8_t gpio_num, uint8_t pull_mode){
 	if(!VALID_GPIO(gpio_num)) return;
 
-	SET_INPUT_ENABLE(REG_BIT_GPIO_X(gpio_num));
+	SET_INPUT_ENABLE_BITS(REG_BIT_GPIO_X(gpio_num));
 
 	SET_REG_BITS(
 		REG_GPIO_X_IO_MUX(gpio_num), REG_IO_MUX_INPUT_EN_BIT |
@@ -70,18 +70,39 @@ void gpio_config_in_bits(uint32_t gpio_bits, uint8_t pull_mode){
 
 // Funciones para leer y escribir en pines GPIO compatibles:
 uint8_t gpio_read(uint8_t gpio_num){
-	if(READ_REG_BIT(REG_GPIO_ENABLE, REG_BIT_GPIO_X(gpio_num))){
+	if(READ_REG_BIT(REG_GPIO_ENABLE, REG_BIT_GPIO_X(gpio_num)) == GPIO_INPUT){
 		// Read bit == 1 (input):
-		return READ_INPUT(gpio_num);
+		return READ_INPUT_PIN(gpio_num);
 	}
 	else{
 		// Read bit == 0 (output or disabled):
-		return READ_OUTPUT(gpio_num);
+		return READ_OUTPUT_PIN(gpio_num);
 	}	
 }
 
 void gpio_write(uint8_t gpio_num, uint8_t state){
+	// Si el GPIO está configurado como entrada en el registro de habilitación,
+	// no escribe nada y retorna:
+	if(READ_REG_BIT(REG_GPIO_ENABLE, REG_BIT_GPIO_X(gpio_num)) == GPIO_INPUT)
+		return;
 	
+	// El GPIO está configurado como salida y se escribe el estado deseado:
+	if(state == 0)
+		CLEAR_OUTPUT_BITS(REG_BIT_GPIO_X(gpio_num));
+	else
+		SET_OUTPUT_BITS(REG_BIT_GPIO_X(gpio_num));
+		
+	return;	
+}
+
+uint8_t gpio_toggle(uint8_t gpio_num){
+	// Si el GPIO está configurado como salida en el registro de habilitación,
+	// escribe el valor opuesto al estado actual y lo retorna:
+	if(READ_REG_BIT(REG_GPIO_ENABLE, REG_BIT_GPIO_X(gpio_num)) == GPIO_OUTPUT){
+		TOGGLE_OUTPUT_BITS(REG_BIT_GPIO_X(gpio_num));
+		return READ_OUTPUT_PIN(gpio_num);
+	}
+	return 2;
 }
 
 
