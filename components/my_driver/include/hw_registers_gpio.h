@@ -32,7 +32,7 @@
 #define REG_GPIO_IN 		HWREG32(0x3FF4403C) // GPIO 0-31 input registers.
 #define REG_GPIO_IN1 		HWREG32(0x3FF44040) // GPIO 32-39 input registers.
 
-#define REG_GPIO_STATUS	HWREG32(0x3FF44044) // GPIO 0-31 interrupt status register.
+#define REG_GPIO_STATUS		HWREG32(0x3FF44044) // GPIO 0-31 interrupt status register.
 #define REG_GPIO_STATUS1	HWREG32(0x3FF44050) // GPIO 32-39 interrupt status register.
 
 
@@ -197,9 +197,20 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 
 
 // Macro - Funciones para leer registros:
-#define READ_ADDRESS(address)		(*HWREG32(address))
-#define READ_REG(hwreg32)			(*hwreg32)
-#define READ_INPUT(gpio_num)		(READ_REG(REG_GPIO_IN) & REG_BIT_GPIO_X(gpio_num))
+#define READ_ADDRESS(address)			(*HWREG32(address))
+#define READ_ADDRESS_BIT(address, bit)	(READ_ADDRESS(address) & bit)
+
+#define READ_REG(hwreg32)				(*hwreg32)
+#define READ_REG_BIT(hwreg32, bit)		(READ_REG(hwreg32) & bit)
+
+#define READ_INPUT(gpio_num)								\
+	(READ_REG_BIT(											\
+		((gpio_num <= 31) ? REG_GPIO_IN : REG_GPIO_IN1),	\
+		REG_BIT_GPIO_X(gpio_num)							\
+	))														\
+	
+#define READ_OUTPUT(gpio_num)	\
+	(READ_REG_BIT(REG_GPIO_OUT, REG_BIT_GPIO_X(gpio_num)))
 
 
 // Macro - Funciones para obtener la dirección de registros GPIO

@@ -3,6 +3,10 @@
 #include "gpio_2026.h"
 
 
+
+
+// Funciones para configurar GPIOs como salidas binarias normales:
+
 void gpio_config_out(uint8_t gpio_num){
 	if(VALID_GPIO_OUTPUT(gpio_num)){
 		SET_OUTPUT_ENABLE(REG_BIT_GPIO_X(gpio_num));
@@ -24,6 +28,9 @@ void gpio_config_out_bits(uint32_t gpio_bits){
 	
 	return;
 }
+
+
+// Funciones para configurar GPIOs como entradas binarias normales:
 
 void gpio_config_in(uint8_t gpio_num, uint8_t pull_mode){
 	if(!VALID_GPIO(gpio_num)) return;
@@ -59,3 +66,23 @@ void gpio_config_in_bits(uint32_t gpio_bits, uint8_t pull_mode){
 	}
 	return;
 }
+
+
+// Funciones para leer y escribir en pines GPIO compatibles:
+uint8_t gpio_read(uint8_t gpio_num){
+	if(READ_REG_BIT(REG_GPIO_ENABLE, REG_BIT_GPIO_X(gpio_num))){
+		// Read bit == 1 (input):
+		return READ_INPUT(gpio_num);
+	}
+	else{
+		// Read bit == 0 (output or disabled):
+		return READ_OUTPUT(gpio_num);
+	}	
+}
+
+void gpio_write(uint8_t gpio_num, uint8_t state){
+	
+}
+
+
+
