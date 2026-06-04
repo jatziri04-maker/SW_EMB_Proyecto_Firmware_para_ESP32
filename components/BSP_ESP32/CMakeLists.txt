@@ -5,6 +5,7 @@ idf_component_register(
 		"include"
 	REQUIRES
 		"Drive_Gpio2026"
+		"my_HAL"
 )
 
 
