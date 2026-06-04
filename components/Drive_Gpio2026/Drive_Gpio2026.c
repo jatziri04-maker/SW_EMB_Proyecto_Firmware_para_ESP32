@@ -9,7 +9,7 @@
     } while(0)
     
     
-    void gpio_init2026(void)
+void gpio_init2026(void)
 {
     // PULL_WPU porque los botones son activos en bajo
     gpio_config_in(&IO_MUX_GPIO18_REG, PIN_BIT18, PULL_WPU);
