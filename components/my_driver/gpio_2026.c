@@ -8,7 +8,7 @@
 
 // Funciones para configurar GPIOs como salidas binarias normales:
 
-void gpio_config_out(uint8_t gpio_num){
+void gpio_config_out(uint8_t gpio_num, uint8_t invert_logic){
 	if(VALID_GPIO_OUTPUT(gpio_num)){
 		SET_OUTPUT_ENABLE_BITS(REG_BIT_GPIO_X(gpio_num));
 		CLEAR_OUTPUT_BITS(REG_BIT_GPIO_X(gpio_num));
@@ -33,8 +33,25 @@ void gpio_config_out_bits(uint32_t gpio_bits){
 
 // Funciones para configurar GPIOs como entradas binarias normales:
 
-void gpio_config_in(uint8_t gpio_num, uint8_t pull_mode){
+void gpio_config_in(uint8_t gpio_num, uint8_t pull_mode, uint8_t invert_logic){
 	if(!VALID_GPIO(gpio_num)) return;
+	
+	
+	if(invert_logic){
+		CLEAR_REG_BITS(REG_GPIO_FUNC_X_IN_SEL_CFG(gpio_num), 0xFFFFFFFF);
+		SET_REG_BITS(REG_GPIO_FUNC_X_IN_SEL_CFG(gpio_num), gpio_num);
+		
+		SET_REG_BITS(REG_GPIO_FUNC_X_IN_SEL_CFG(gpio_num), FUNC_IN_INV_SEL_BIT);
+		
+		SET_REG_BITS(REG_GPIO_FUNC_X_IN_SEL_CFG(gpio_num), SIG_IN_SEL_BIT);
+		
+		printf(
+			"GPIO_FUNC_%d_IN_SEL_CFG (%p) state: 0x%x\n\n", 
+			gpio_num,
+			REG_GPIO_FUNC_X_IN_SEL_CFG(gpio_num),
+			(unsigned int)READ_REG(REG_GPIO_FUNC_X_IN_SEL_CFG(gpio_num))
+		);
+	}
 	
 	//printf("GPIO %d configured as input\n", gpio_num);
 
@@ -74,7 +91,7 @@ void gpio_config_in_bits(uint32_t gpio_bits, uint8_t pull_mode){
 	
 	for(i = 0; i < 40; i++){
 		if(((gpio_bits >> i) & 1) && VALID_GPIO(i))
-			gpio_config_in(i, pull_mode);
+			gpio_config_in(i, pull_mode, 0);
 	}
 	return;
 }

@@ -12,7 +12,7 @@
 #include "arch/sys_arch.h"
 #include "freertos/projdefs.h"
 
-#define VERSION 0
+#define VERSION -1
 
 #if VERSION == 0
 
@@ -84,12 +84,14 @@ void app_main(void){
 #define BTN_RIGHT	19
 
 void app_main(){
+	vTaskDelay(pdMS_TO_TICKS(5000));
+	printf("Starting system...\n\n");
 	
-	gpio_config_out(LED_BUILTIN);
-	gpio_config_out(LED_YELLOW);
+	gpio_config_out(LED_BUILTIN, false);
+	gpio_config_out(LED_YELLOW, false);
 	
-	gpio_config_in(BTN_LEFT, INPUT_PULLUP_MODE);
-	gpio_config_in(BTN_RIGHT, INPUT_PULLUP_MODE);
+	gpio_config_in(BTN_LEFT, INPUT_PULLUP_MODE, true);
+	gpio_config_in(BTN_RIGHT, INPUT_PULLUP_MODE, false);
 	
 	while(true){
 		if(gpio_read(BTN_LEFT) == 0){

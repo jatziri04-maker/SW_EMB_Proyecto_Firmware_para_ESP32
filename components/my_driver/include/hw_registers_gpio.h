@@ -141,15 +141,52 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 // Bit mask - Pines en registros GPIO comúnes (ej.: REG_GPIO_ENABLE):
 #define REG_BIT_GPIO_X(gpio_num) (1UL << (gpio_num))
 
+
 // Bit mask - Bits de los registros IO MUX (entradas):
 #define REG_IO_MUX_INPUT_EN_BIT		(1 << 9)	// FUN_IE REG: Input enable of pin: 1 = enabled.
-#define REG_IO_MUX_PULL_UP_EN_BIT 	(1 << 8) 	// FUN_WPU REG: 1: internal pull-up enabled.
-#define REG_IO_MUX_PULL_DOWN_EN_BIT (1 << 7)	// FUN_WPD REG: 1: internal pull-down enabled.
+#define REG_IO_MUX_PULL_UP_EN_BIT 	(1 << 8) 	// FUN_WPU REG: 1 = internal pull-up enabled.
+#define REG_IO_MUX_PULL_DOWN_EN_BIT (1 << 7)	// FUN_WPD REG: 1 = internal pull-down enabled.
 #define REG_IO_MUX_FUN_DRV_BITS 	(0x3 << 10)	// FUN_DRV REG: 0.
 #define REG_IO_MUX_FUN_SEL_BITS		(0x7 << 12) // MCU_SEL REG: 2 GPIO mode.
 
 #define REG_IO_MUX_FUN_DRV_FOR_GPIO	(0x00 << 10)
 #define REG_IO_MUX_FUN_SEL_FOR_GPIO	(0x02 << 12)
+
+
+// Bit mask - Bits de los registros GPIO_FUNCy_IN_SEL_CFG:
+#define SIG_IN_SEL_BIT				(1UL << 7)	// Bit 7
+	// GPIO_SIGy_IN_SEL:
+	// 0 = 	Conectar señal directamente a través del periférico configurado
+	//		en IO_MUX.
+	// 1 = 	Dirigir señal a través de la GPIO matrix.
+#define FUNC_IN_INV_SEL_BIT			(1UL << 6) 	// Bit 6
+	// GPIO_FUNCy_IN_INV_SEL:
+	// 0 = 	No invertir señal.
+	// 1 =	Invertir señal.
+#define FUNC_IN_SEL_BIT_SHIFT 		0 	// Bits 5-0
+#define FUNC_IN_SEL_BITS_LENGTH		6	
+	// GPIO_FUNCy_IN_SEL:
+	// 0-39 =	Selecciona a cual pin de entrada de la GPIO matrix se conecta.
+	// 0x38 =	Entrada en alto constante.
+	// 0x30 =	Entrada en bajo constante.
+	
+
+// Bit mask - Bits de los registros GPIO_FUNCy_OUT_SEL_CFG:
+#define FUNC_OEN_INV_SEL_BIT	(1 << 11)
+	// GPIO_FUNCn_OEN_INV_SEL:
+	// 0 = 	No invertir señal de output enable.
+	// 1 =	Invertir señal de output enable.
+#define FUNC_OEN_SEL_BIT		(1 << 10)
+	// GPIO_FUNCn_OEN_SEL:
+	// 0 =	El periférico (GPIO_ENABLE_REG) controla la habilitación como entrada.
+	// 1 =	Fuerza al pin a siempre ser una salida.
+#define FUNC_OUT_INV_SEL_BIT	(1 << 9)
+	// GPIO_FUNCn_OUT_INV_SEL:
+	// 0 = 	No invertir señal.
+	// 1 =	Invertir señal.
+#define FUNC_OUT_SEL 			(1 << 0) // Bits 8-0
+	// GPIO_FUNCn_OUT_SEL:
+	// 256 = Conecta al registro GPIO_OUT_REG.
 
 
 
