@@ -9,18 +9,18 @@
     } while(0)
     
     
-void gpio_init2026(void)
+void j_gpio_init2026(void)
 {
     // PULL_WPU porque los botones son activos en bajo
-    gpio_config_in(&IO_MUX_GPIO18_REG, PIN_BIT18, PULL_WPU);
-    gpio_config_in(&IO_MUX_GPIO19_REG, PIN_BIT19, PULL_WPU);
+    j_gpio_config_in(&IO_MUX_GPIO18_REG, PIN_BIT18, PULL_WPU);
+    j_gpio_config_in(&IO_MUX_GPIO19_REG, PIN_BIT19, PULL_WPU);
 
-    gpio_config_out(&IO_MUX_GPIO12_REG, PIN_BIT12);
-    gpio_config_out(&IO_MUX_GPIO13_REG, PIN_BIT13);
-    gpio_config_out(&IO_MUX_GPIO14_REG, PIN_BIT14);
+    j_gpio_config_out(&IO_MUX_GPIO12_REG, PIN_BIT12);
+    j_gpio_config_out(&IO_MUX_GPIO13_REG, PIN_BIT13);
+    j_gpio_config_out(&IO_MUX_GPIO14_REG, PIN_BIT14);
 }
 
-void gpio_config_in(volatile uint32_t *pin, uint32_t bit, uint32_t pull_mode)
+void j_gpio_config_in(volatile uint32_t *pin, uint32_t bit, uint32_t pull_mode)
 {
     *pin |= FUN_IE;             // Habilitar input
     GPIO_ENABLE &= ~bit;        // Deshabilitar como salida
@@ -37,7 +37,7 @@ void gpio_config_in(volatile uint32_t *pin, uint32_t bit, uint32_t pull_mode)
     }
 }
 
-void gpio_config_out(volatile uint32_t *pin, uint32_t bit)
+void j_gpio_config_out(volatile uint32_t *pin, uint32_t bit)
 {
     *pin &= ~FUN_IE;
     MCU_SEL_GPIO(*pin);
@@ -45,12 +45,12 @@ void gpio_config_out(volatile uint32_t *pin, uint32_t bit)
     GPIO_OUT_W1TS = bit;  // iniciar en 1 = LEDs apagados (ánodo común)
 }
 
-bool gpio_read(uint32_t pin_bit)
+bool j_gpio_read(uint32_t pin_bit)
 {
     return ((GPIO_IN & pin_bit) == 0);  // invertido
 }
 
-void gpio_write(uint32_t pin_bit, int on_off)
+void j_gpio_write(uint32_t pin_bit, int on_off)
 {
     bool es_rgb = (pin_bit & RGB_ALL) != 0;
 
@@ -68,8 +68,8 @@ void gpio_write(uint32_t pin_bit, int on_off)
 // Enciende el color indicado y apaga los demás en una sola función
 /*void rgb_set(int r, int g, int b)
 {
-    gpio_write(PIN_BIT13, r);
-    gpio_write(PIN_BIT12, g);
-    gpio_write(PIN_BIT14, b);
+    j_gpio_write(PIN_BIT13, r);
+    j_gpio_write(PIN_BIT12, g);
+    j_gpio_write(PIN_BIT14, b);
 }*/
 

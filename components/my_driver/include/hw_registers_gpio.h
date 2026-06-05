@@ -200,7 +200,7 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 #define READ_ADDRESS_BIT(address, bit)	(READ_ADDRESS(address) & bit)
 
 #define READ_REG(hwreg32)				(*hwreg32)
-#define READ_REG_BIT(hwreg32, bit)		(READ_REG(hwreg32) & bit)
+#define READ_REG_BIT(hwreg32, bit)		((READ_REG(hwreg32) & bit) != 0)
 
 #define READ_INPUT_PIN(gpio_num)								\
 	(READ_REG_BIT(											\
