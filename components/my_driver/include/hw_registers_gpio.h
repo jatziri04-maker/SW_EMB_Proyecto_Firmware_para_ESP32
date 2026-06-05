@@ -27,6 +27,8 @@
 #define REG_GPIO_OUT_W1TS	HWREG32(0x3FF44008)
 #define REG_GPIO_OUT_W1TC	HWREG32(0x3FF4400C)
 
+#define REG_GPIO_FUNC_0_OUT_SEL_CFG	HWREG32(0x3FF44530)
+
 
 // Registro - GPIO - Registros para configuración de entradas:
 #define REG_GPIO_IN 		HWREG32(0x3FF4403C) // GPIO 0-31 input registers.
@@ -146,7 +148,13 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 #define REG_IO_MUX_INPUT_EN_BIT		(1 << 9)	// FUN_IE REG: Input enable of pin: 1 = enabled.
 #define REG_IO_MUX_PULL_UP_EN_BIT 	(1 << 8) 	// FUN_WPU REG: 1 = internal pull-up enabled.
 #define REG_IO_MUX_PULL_DOWN_EN_BIT (1 << 7)	// FUN_WPD REG: 1 = internal pull-down enabled.
-#define REG_IO_MUX_FUN_DRV_BITS 	(0x3 << 10)	// FUN_DRV REG: 0.
+
+#define REG_IO_MUX_FUN_DRV_BITS 		(0x3 << 10)	// FUN_DRV REG: 0.
+#define REG_IO_MUX_FUN_DRV_BITS_FIELD	(1UL << 10 | 1UL << 11)
+#define REG_IO_MUX_FUN_DRV_BITS_20MA	(1UL << 10)
+#define REG_IO_MUX_FUN_DRV_BITS_40MA	(1UL << 11)
+#define REG_IO_MUX_FUN_DRV_BITS_80MA	(1UL << 10 | 1UL << 11)
+
 #define REG_IO_MUX_FUN_SEL_BITS		(0x7 << 12) // MCU_SEL REG: 2 GPIO mode.
 
 #define REG_IO_MUX_FUN_DRV_FOR_GPIO	(0x00 << 10)
@@ -184,7 +192,8 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 	// GPIO_FUNCn_OUT_INV_SEL:
 	// 0 = 	No invertir señal.
 	// 1 =	Invertir señal.
-#define FUNC_OUT_SEL 			(1 << 0) // Bits 8-0
+#define FUNC_OUT_SEL_BIT_SHIFT 		0 	// Bits 8-0
+#define FUNC_OUT_SEL_BITS_LENGTH	9
 	// GPIO_FUNCn_OUT_SEL:
 	// 256 = Conecta al registro GPIO_OUT_REG.
 
@@ -242,7 +251,7 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 #define READ_INPUT_PIN(gpio_num)								\
 	(READ_REG_BIT(											\
 		((gpio_num <= 31) ? REG_GPIO_IN : REG_GPIO_IN1),	\
-		REG_BIT_GPIO_X(gpio_num)							\
+		((gpio_num <= 31) ? REG_BIT_GPIO_X(gpio_num) : REG_BIT_GPIO_X(gpio_num - 32))	\
 	))														\
 	
 #define READ_OUTPUT_PIN(gpio_num)	\
@@ -250,7 +259,7 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 
 
 // Macro - Funciones para obtener la dirección de registros GPIO
-// configurados como entradas o con funcionalidad adicional:
+// configurados como entradas / salidas o funcionalidad adicional:
 #define REG_GPIO_X_IO_MUX(gpio_num) \
 	(VALID_GPIO(gpio_num) ? hwreg32_io_mux[(gpio_num)] : 0x00)
 	
@@ -259,6 +268,9 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 
 #define REG_GPIO_FUNC_X_IN_SEL_CFG(gpio_num) \
 	(VALID_GPIO(gpio_num) ? (REG_GPIO_FUNC_0_IN_SEL_CFG + (0x04)*(gpio_num)) : 0x00)
+
+#define REG_GPIO_FUNC_X_OUT_SEL_CFG(gpio_num) \
+	(VALID_GPIO_OUTPUT(gpio_num) ? (REG_GPIO_FUNC_0_OUT_SEL_CFG + (0x04)*(gpio_num)) : 0x00)
 
 
 // Macro - Funciones para configurar función de IO MUX (2: GPIO mode):

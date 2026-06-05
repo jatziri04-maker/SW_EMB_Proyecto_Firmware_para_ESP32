@@ -78,7 +78,7 @@ void app_main(void){
 #include "gpio_2026.h"
 
 #define LED_BUILTIN	2
-#define LED_YELLOW	4
+#define LED_YELLOW	2
 
 #define BTN_LEFT	18
 #define BTN_RIGHT	19
@@ -87,18 +87,18 @@ void app_main(){
 	vTaskDelay(pdMS_TO_TICKS(5000));
 	printf("Starting system...\n\n");
 	
-	gpio_config_out(LED_BUILTIN, false);
-	gpio_config_out(LED_YELLOW, false);
+	//gpio_config_out(LED_BUILTIN, false);
+	gpio_config_out(LED_YELLOW, true);
 	
-	gpio_config_in(BTN_LEFT, INPUT_PULLUP_MODE, true);
+	gpio_config_in(BTN_LEFT, INPUT_PULLUP_MODE, false);
 	gpio_config_in(BTN_RIGHT, INPUT_PULLUP_MODE, false);
 	
 	while(true){
 		if(gpio_read(BTN_LEFT) == 0){
-			gpio_toggle(LED_BUILTIN);
+			gpio_write(LED_YELLOW, true);
 		}
 		else{
-			gpio_write(LED_BUILTIN, false);
+			gpio_write(LED_YELLOW, false);
 		}
 		
 		
