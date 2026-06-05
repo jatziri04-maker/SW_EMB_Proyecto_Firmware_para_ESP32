@@ -10,12 +10,11 @@ para poder llevar a cabo la aplicación
 #include <stdbool.h>
 #include <stdint.h>
 // MAPEOS/MASCARAS (hardware específico de mi ESP32) debe usar HAL
-#define BTN1   (1<<18)
-#define BTN2   (1<<19)
-
-#define LED_R  (1<<12)
-#define LED_G  (1<<13)
-#define LED_B  (1<<14)
+#define BTN_LEFT	18
+#define BTN_RIGHT	19
+#define LED_R 		13
+#define LED_G		12
+#define LED_B		14
 // API BSP
 void bsp_init(void);
 

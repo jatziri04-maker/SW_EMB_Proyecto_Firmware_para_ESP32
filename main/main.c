@@ -23,10 +23,9 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-//Manda a llamar a la capa BSP o HAL
+//Manda a llamar a la capa BSP 
 
 #include "BSP_ESP32.h"
-
 
 void app_main(void){
 	
