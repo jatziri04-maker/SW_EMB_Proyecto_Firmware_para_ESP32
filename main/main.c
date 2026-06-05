@@ -8,18 +8,27 @@
 						->Abdiel Alejandro Rodríguez Coronado (22061055)					   
 */
 
+
+#include "arch/sys_arch.h"
+#include "freertos/projdefs.h"
+
+#define VERSION 0
+
+#if VERSION == 0
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-//Manda a llamar a la capa BSP ahora tiene que llamar a la capa del HAL 
-#include "BSP_ESP32.h"
-#include "../BSP_ESP32.c"
 
-void app_main(void)
-{
+//Manda a llamar a la capa BSP 
+
+#include "BSP_ESP32.h"
+
+void app_main(void){
+	
     bsp_init();
 
     bool running = false;
@@ -51,5 +60,51 @@ void app_main(void)
         }
 
         vTaskDelay(pdMS_TO_TICKS(10));
-    }
+    }    
 }
+
+
+
+
+
+
+
+
+#elif VERSION == -1
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include "hw_registers_gpio.h"
+#include "gpio_2026.h"
+
+#define LED_BUILTIN	2
+#define LED_YELLOW	4
+
+#define BTN_LEFT	18
+#define BTN_RIGHT	19
+
+void app_main(){
+	
+	gpio_config_out(LED_BUILTIN);
+	gpio_config_out(LED_YELLOW);
+	
+	gpio_config_in(BTN_LEFT, INPUT_PULLUP_MODE);
+	gpio_config_in(BTN_RIGHT, INPUT_PULLUP_MODE);
+	
+	while(true){
+		if(gpio_read(BTN_LEFT) == 0){
+			gpio_toggle(LED_BUILTIN);
+		}
+		else{
+			gpio_write(LED_BUILTIN, false);
+		}
+		
+		
+		vTaskDelay(pdMS_TO_TICKS(200));
+	}
+	
+	return;
+}	
+
+#endif
