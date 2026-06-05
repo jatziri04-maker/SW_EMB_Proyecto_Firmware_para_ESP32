@@ -59,11 +59,11 @@
 #define COLOR_MS    1000
 
 /* ───────── Prototipos ─────────────────────────────────────────────── */
-void gpio_init2026(void);
-void gpio_config_in(volatile uint32_t *pin, uint32_t bit, uint32_t pull_mode);
-void gpio_config_out(volatile uint32_t *pin, uint32_t bit);
-bool gpio_read(uint32_t pin_bit);
-void gpio_write(uint32_t pin_bit, int on_off);
+void j_gpio_init2026(void);
+void j_gpio_config_in(volatile uint32_t *pin, uint32_t bit, uint32_t pull_mode);
+void j_gpio_config_out(volatile uint32_t *pin, uint32_t bit);
+bool j_gpio_read(uint32_t pin_bit);
+void j_gpio_write(uint32_t pin_bit, int on_off);
 void rgb_set(int r, int g, int b);   // simplifica la secuencia
 
 #endif
