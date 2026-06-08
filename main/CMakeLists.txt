@@ -6,6 +6,9 @@ idf_component_register(
     INCLUDE_DIRS        # optional, add here public include directories
     	.
     PRIV_INCLUDE_DIRS   # optional, add here private include directories
-    REQUIRES            # optional, list the public requirements (component names)
+    REQUIRES 
+    	my_driver 
+    	my_HAL 
+    	freertos
     PRIV_REQUIRES       # optional, list the private requirements
 )

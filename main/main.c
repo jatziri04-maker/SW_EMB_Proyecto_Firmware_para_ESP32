@@ -9,7 +9,6 @@
 */
 
 
-#include "gpio_2026.h"
 #define VERSION -2
 // VERSION >= 0	-> Pruebas de Jatziri
 //	- 0: 	Prueba de BSP.
@@ -143,9 +142,9 @@ void app_main(){
 
 #include <stdio.h>
 #include <stdbool.h>
-#include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_attr.h"
 
 #include "my_driver.h"
 #include "my_HAL.h"
@@ -163,7 +162,7 @@ void app_main(){
 #define BTN_LEFT	18
 #define BTN_RIGHT	19
 
-#define INPUTS_INVERTED	false
+#define INPUTS_INVERTED	true
 
 
 
@@ -180,7 +179,6 @@ void app_main(){
 		if(button_was_pressed(&left_button)){
 			gpio_toggle(LED_BUILTIN);
 		}
-		
 		
 		vTaskDelay(pdMS_TO_TICKS(10));
 	}
