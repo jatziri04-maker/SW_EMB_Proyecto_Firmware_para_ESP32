@@ -44,12 +44,14 @@ void app_main(void){
         if(bsp_btn2_pressed()){
             running = false;
             bsp_rgb_set(0,0,0);
+            gpio_write(LED_STATE, false);
             vTaskDelay(pdMS_TO_TICKS(50));
         }
 
         if(running){
+			gpio_toggle(LED_STATE);
             switch(color){
-                case 0: bsp_rgb_set(1,0,0); break;
+                case 0: gpio_toggle(1,0,0); break;
                 case 1: bsp_rgb_set(0,1,0); break;
                 case 2: bsp_rgb_set(0,0,1); break;
             }

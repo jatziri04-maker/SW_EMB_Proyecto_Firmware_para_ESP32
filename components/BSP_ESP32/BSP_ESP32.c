@@ -23,6 +23,7 @@ void bsp_init(void)
     bsp_gpio_config_in(BTN_LEFT, INPUT_PULLUP_MODE);
     bsp_gpio_config_in(BTN_RIGHT, INPUT_PULLUP_MODE);
 
+	bsp_gpio_config_out(LED_STATE);
     bsp_gpio_config_out(LED_R);
     bsp_gpio_config_out(LED_G);
     bsp_gpio_config_out(LED_B);
