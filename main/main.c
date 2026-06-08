@@ -9,18 +9,18 @@
 */
 
 
-#include "gpio_2026.h"
-#define VERSION -2
+
+#define VERSION 0
 // VERSION >= 0	-> Pruebas de Jatziri
-//	- 0: 	Prueba de BSP.
+//	-> 0: 	Prueba de BSP.
 //
 // VERSION < 0	-> Pruebas de Alex
-//	- -1: 	Prueba simple de driver para GPIO.
-//	- -2: 	Prueba simple de HAL para GPIO.
+//	-> -1: 	Prueba simple de driver para GPIO.
+//	-> -2: 	Prueba simple de HAL para GPIO.
 
 
 
-#if VERSION == 0
+#if VERSION == 1
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -28,49 +28,94 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-//Manda a llamar a la capa BSP ahora tiene que llamar a la capa del HAL 
+//Manda a llamar a la capa BSP 
 #include "BSP_ESP32.h"
-
 
 void app_main(void){
 	
     bsp_init();
-
-    bool running = false;
-    uint8_t color = 0;
+    bool system_run = false;
+    uint8_t cont_color = 0;
+    printf("wait button... \n\n");
 
     while(true)
     {
         if(bsp_btn1_pressed()){
-            running = true;
+			printf("boton 1 pressed\n");
+			printf("Starting system...\n\n");
+			system_run = true;
+			cont_color = 1;
+			bsp_led_state_set();
+		}
+		
+		else if(bsp_btn2_pressed()){
+			printf("boton 2 pressed\n");
+			printf("System stop...\n\n");
+           bsp_system_stop();
+           cont_color = 0; 
+           system_run = false;
             vTaskDelay(pdMS_TO_TICKS(50));
         }
-
-        if(bsp_btn2_pressed()){
-            running = false;
-            bsp_rgb_set(0,0,0);
-            vTaskDelay(pdMS_TO_TICKS(50));
-        }
-
-        if(running){
-            switch(color){
-                case 0: bsp_rgb_set(1,0,0); break;
-                case 1: bsp_rgb_set(0,1,0); break;
-                case 2: bsp_rgb_set(0,0,1); break;
+        
+		if(system_run){
+			
+       		switch(cont_color){
+	            case 1: bsp_rgb_set(1,0,0); break;
+	            case 2: bsp_rgb_set(0,1,0); break;
+	            case 3: bsp_rgb_set(0,0,1); break;
+	            
             }
-
-            color = (color + 1) % 3;
-
-            vTaskDelay(pdMS_TO_TICKS(1000));
+            
+            vTaskDelay(pdMS_TO_TICKS(1000));  
+            if(cont_color >3) cont_color =0;
         }
-
+		cont_color ++;
+        
         vTaskDelay(pdMS_TO_TICKS(10));
     }    
 }
 
 
 
+#elif VERSION == 1
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "BSP_ESP32.h"
 
+void app_main(void)
+{
+    printf("Punto 1: Inicio\n");
+    vTaskDelay(pdMS_TO_TICKS(100));
+    
+    printf("Punto 2: Llamando bsp_init\n");
+    bsp_init();
+    printf("Punto 3: bsp_init completado\n");
+    
+    printf("Punto 4: Iniciando loop\n");
+    
+    int counter = 0;
+    
+    while(true) {
+        counter++;
+        
+        if(counter % 100 == 0) {
+            printf("Sistema vivo - contador: %d\n", counter);
+        }
+        
+        if(bsp_btn1_pressed()) {
+            printf("Botón 1 presionado!\n");
+            bsp_rgb_set(1, 0, 0);
+        }
+        
+        if(bsp_btn2_pressed()) {
+            printf("Botón 2 presionado!\n");
+            bsp_rgb_set(0, 0, 0);
+        }
+        
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
+}
 
 
 
@@ -85,19 +130,6 @@ void app_main(void){
 
 #include "my_driver.h"
 
-
-
-
-#define LED_BUILTIN	2
-#define LED_YELLOW	4
-#define LED_RED		5
-
-#define OUTPUTS_INVERTED false
-
-#define BTN_LEFT	18
-#define BTN_RIGHT	19
-
-#define INPUTS_INVERTED	false
 
 
 

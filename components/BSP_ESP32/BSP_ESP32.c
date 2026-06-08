@@ -2,45 +2,57 @@
 #include "Drive_Gpio2026.h"
 #include "my_HAL.h"
 #include "BSP_ESP32.h"
+#include "hal_button.h"
+#include "gpio_2026.h"
+
+button_t left_button = {0};
+button_t right_button = {0};
 
 void bsp_init(void)
 {
-	/* Ejemplo con nuevo driver:
-	
-	gpio_config_in(BTN_LEFT, INPUT_NO_PULL_MODE/INPUT_PULLUP_MODE/INPUT_PULLDOWN_MODE);
-	gpio_config_out(LED_BUILTIN);
-	
-	gpio_read(BTN_LEFT);
-	gpio_write(LED_BUILTIN, false/true);
-	gpio_toggle(LED_BUILTIN);
-	
-	Nota:
-	BTN_LEFT 	== Número de pin (18)
-	LED_BUILTIN == Número de pin (2)
-	
-	*/
-	
-    j_gpio_config_in(&IO_MUX_GPIO18_REG, BTN1, PULL_WPD);
-    j_gpio_config_in(&IO_MUX_GPIO19_REG, BTN2, PULL_WPD);
 
-    j_gpio_config_out(&IO_MUX_GPIO12_REG, LED_R);
-    j_gpio_config_out(&IO_MUX_GPIO13_REG, LED_G);
-    j_gpio_config_out(&IO_MUX_GPIO14_REG, LED_B);
+	gpio_config_out(LED_STATE, OUTPUTS_INVERTED);
+    gpio_config_out(LED_R, OUTPUTS_INVERTED);
+    gpio_config_out(LED_G, OUTPUTS_INVERTED);
+    gpio_config_out(LED_B, OUTPUTS_INVERTED); 
+	
+    button_init(&left_button, BTN_LEFT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
+	button_init(&right_button, BTN_RIGHT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
+
+	// Inicializar todo apagado
+    gpio_write(LED_STATE, false);
+    gpio_write(LED_R, false);
+    gpio_write(LED_G, false);
+    gpio_write(LED_B, false);
+    
+   printf("Se inicializo BSP... \n\n");
 }
 
 bool bsp_btn1_pressed(void)
 {
-    return j_gpio_read(BTN1);
+	return button_was_pressed(&left_button);
+	
 }
 
 bool bsp_btn2_pressed(void)
 {
-    return j_gpio_read(BTN2);
+	return button_was_pressed(&right_button);
+
 }
 
 void bsp_rgb_set(uint8_t r, uint8_t g, uint8_t b)
 {
-    j_gpio_write(LED_R, r);
-    j_gpio_write(LED_G, g);
-    j_gpio_write(LED_B, b);
+    gpio_write(LED_R, r);
+    gpio_write(LED_G, g);
+    gpio_write(LED_B, b);
+}
+
+void bsp_led_state_set(void){
+	gpio_toggle(LED_STATE);
+		
+}
+
+void bsp_system_stop(void){
+	 bsp_rgb_set(0,0,0);
+    gpio_write(LED_STATE, 0);
 }
