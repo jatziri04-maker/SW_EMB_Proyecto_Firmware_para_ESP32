@@ -10,6 +10,12 @@
 
 
 /**************************************************************************/
+// **** Variables globales:
+extern uint64_t inverted_gpios;
+
+
+
+/**************************************************************************/
 // **** Prototipos de funciones:
 
 // Funciones para configurar GPIOs como salidas binarias normales:

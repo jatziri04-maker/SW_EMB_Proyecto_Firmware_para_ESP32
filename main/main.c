@@ -77,28 +77,44 @@ void app_main(void){
 #include "hw_registers_gpio.h"
 #include "gpio_2026.h"
 
+
+
+
 #define LED_BUILTIN	2
-#define LED_YELLOW	2
+#define LED_YELLOW	4
+#define LED_RED		5
+
+#define OUTPUTS_INVERTED true
 
 #define BTN_LEFT	18
 #define BTN_RIGHT	19
 
+#define INPUTS_INVERTED	true
+
+
+
+
 void app_main(){
-	vTaskDelay(pdMS_TO_TICKS(5000));
-	printf("Starting system...\n\n");
+	//vTaskDelay(pdMS_TO_TICKS(5000));
+	//printf("Starting system...\n\n");
 	
-	//gpio_config_out(LED_BUILTIN, false);
-	gpio_config_out(LED_YELLOW, true);
+	gpio_config_out(LED_BUILTIN, OUTPUTS_INVERTED);
+	gpio_config_out(LED_YELLOW, OUTPUTS_INVERTED);
+	gpio_config_out(LED_RED, OUTPUTS_INVERTED);
 	
-	gpio_config_in(BTN_LEFT, INPUT_PULLUP_MODE, false);
-	gpio_config_in(BTN_RIGHT, INPUT_PULLUP_MODE, false);
+	gpio_config_in(BTN_LEFT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
+	gpio_config_in(BTN_RIGHT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
 	
 	while(true){
 		if(gpio_read(BTN_LEFT) == 0){
+			gpio_write(LED_BUILTIN, true);
 			gpio_write(LED_YELLOW, true);
+			gpio_write(LED_RED, true);
 		}
 		else{
+			gpio_write(LED_BUILTIN, false);
 			gpio_write(LED_YELLOW, false);
+			gpio_write(LED_RED, false);
 		}
 		
 		
