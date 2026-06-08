@@ -26,9 +26,14 @@ void gpio_config_out(uint8_t gpio_num, uint8_t invert_logic){
 	
 	if(!VALID_GPIO_OUTPUT(gpio_num)) return;
 	
-	SET_OUTPUT_ENABLE_BITS(REG_BIT_GPIO_X(gpio_num));
-	CLEAR_OUTPUT_BITS(REG_BIT_GPIO_X(gpio_num));
 	
+	SET_OUTPUT_ENABLE_BITS(REG_BIT_GPIO_X(gpio_num));
+	
+	if(invert_logic)
+		SET_OUTPUT_BITS(REG_BIT_GPIO_X(gpio_num));
+	else
+		CLEAR_OUTPUT_BITS(REG_BIT_GPIO_X(gpio_num));
+ 		
 	
 	// Configuración del IO MUX (dehabilitación de entrada y pull mode):
  
@@ -72,8 +77,14 @@ void gpio_config_out_bits(uint32_t gpio_bits){
 
 // Funciones para configurar GPIOs como entradas binarias normales:
 
-void gpio_config_in(uint8_t gpio_num, uint8_t pull_mode, uint8_t invert_logic){
+void gpio_config_in(uint8_t gpio_num, gpio_mode_e pull_mode, uint8_t invert_logic){
+	
 	if(!VALID_GPIO(gpio_num)) return;
+	if(
+		pull_mode != INPUT_MODE 		&& 
+		pull_mode != INPUT_PULLUP_MODE 	&& 
+		pull_mode != INPUT_PULLDOWN_MODE
+	) return;
 	
 	// **** Habilitación y configuración de GPIO con cierto pull mode:
 	
@@ -83,15 +94,15 @@ void gpio_config_in(uint8_t gpio_num, uint8_t pull_mode, uint8_t invert_logic){
 	// Configuración del IO MUX (habilitación y pull mode):
 	SET_REG_BITS(
 		REG_GPIO_X_IO_MUX(gpio_num), REG_IO_MUX_INPUT_EN_BIT |
-		(pull_mode == INPUT_NO_PULL_MODE 	? 0x00 :
-		 pull_mode == INPUT_PULLUP_MODE 	? REG_IO_MUX_PULL_UP_EN_BIT :
+		(pull_mode == INPUT_MODE 		? 0x00 :
+		 pull_mode == INPUT_PULLUP_MODE ? REG_IO_MUX_PULL_UP_EN_BIT :
 		 REG_IO_MUX_PULL_DOWN_EN_BIT)
 	);
  
 	CLEAR_REG_BITS(
 		REG_GPIO_X_IO_MUX(gpio_num),
-		(pull_mode == INPUT_NO_PULL_MODE 	? REG_IO_MUX_PULL_UP_EN_BIT |  REG_IO_MUX_PULL_DOWN_EN_BIT:
-		 pull_mode == INPUT_PULLUP_MODE 	? REG_IO_MUX_PULL_DOWN_EN_BIT :
+		(pull_mode == INPUT_MODE 		? REG_IO_MUX_PULL_UP_EN_BIT |  REG_IO_MUX_PULL_DOWN_EN_BIT:
+		 pull_mode == INPUT_PULLUP_MODE ? REG_IO_MUX_PULL_DOWN_EN_BIT :
 		 REG_IO_MUX_PULL_UP_EN_BIT)
 	);
 	
@@ -125,7 +136,7 @@ void gpio_config_in(uint8_t gpio_num, uint8_t pull_mode, uint8_t invert_logic){
 	return;
 }
 
-void gpio_config_in_bits(uint32_t gpio_bits, uint8_t pull_mode){
+void gpio_config_in_bits(uint32_t gpio_bits, gpio_mode_e pull_mode){
 	uint8_t i;
 	
 	for(i = 0; i < 40; i++){
@@ -173,5 +184,7 @@ uint8_t gpio_toggle(uint8_t gpio_num){
 	return 0;
 }
 
-
+uint8_t has_inverted_logic(uint8_t gpio_num){
+	return (inverted_gpios >> gpio_num) & 1;
+}
 

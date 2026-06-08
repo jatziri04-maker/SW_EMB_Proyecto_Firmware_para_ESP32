@@ -291,10 +291,6 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 #define GPIO_INPUT	0
 #define GPIO_OUTPUT	1
 
-#define INPUT_NO_PULL_MODE	0
-#define INPUT_PULLUP_MODE 	1
-#define INPUT_PULLDOWN_MODE 2
-
 
 
 

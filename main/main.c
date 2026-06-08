@@ -9,10 +9,16 @@
 */
 
 
-#include "arch/sys_arch.h"
-#include "freertos/projdefs.h"
+#include "gpio_2026.h"
+#define VERSION -2
+// VERSION >= 0	-> Pruebas de Jatziri
+//	- 0: 	Prueba de BSP.
+//
+// VERSION < 0	-> Pruebas de Alex
+//	- -1: 	Prueba simple de driver para GPIO.
+//	- -2: 	Prueba simple de HAL para GPIO.
 
-#define VERSION -1
+
 
 #if VERSION == 0
 
@@ -77,8 +83,10 @@ void app_main(void){
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "hw_registers_gpio.h"
-#include "gpio_2026.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+#include "my_driver.h"
 
 
 
@@ -87,12 +95,12 @@ void app_main(void){
 #define LED_YELLOW	4
 #define LED_RED		5
 
-#define OUTPUTS_INVERTED true
+#define OUTPUTS_INVERTED false
 
 #define BTN_LEFT	18
 #define BTN_RIGHT	19
 
-#define INPUTS_INVERTED	true
+#define INPUTS_INVERTED	false
 
 
 
@@ -127,4 +135,60 @@ void app_main(){
 	return;
 }	
 
-#endif
+
+
+
+
+
+
+
+#elif VERSION == -2
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+#include "my_driver.h"
+#include "my_HAL.h"
+#include "hal_button.h"
+
+
+
+
+#define LED_BUILTIN	2
+#define LED_YELLOW	4
+#define LED_RED		5
+
+#define OUTPUTS_INVERTED false
+
+#define BTN_LEFT	18
+#define BTN_RIGHT	19
+
+#define INPUTS_INVERTED	false
+
+
+
+
+void app_main(){
+	
+	gpio_config_out(LED_BUILTIN, OUTPUTS_INVERTED);
+	
+	button_t left_button = {0};
+	button_init(&left_button, BTN_LEFT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
+	
+	
+	while(true){
+		if(button_was_pressed(&left_button)){
+			gpio_toggle(LED_BUILTIN);
+		}
+		
+		
+		vTaskDelay(pdMS_TO_TICKS(10));
+	}
+	
+	return;
+}	
+
+#endif /* VERSION */
