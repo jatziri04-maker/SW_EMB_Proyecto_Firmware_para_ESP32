@@ -6,6 +6,7 @@ idf_component_register(
 	REQUIRES
 		"Drive_Gpio2026"
 		"my_HAL"
+		"my_driver"
 )
 
 

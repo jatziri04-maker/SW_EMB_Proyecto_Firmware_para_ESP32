@@ -10,19 +10,18 @@ para poder llevar a cabo la aplicación
 #include <stdbool.h>
 #include <stdint.h>
 #include "hal_button.h"
+#include "gpio_2026.h"
 
 // MAPEOS/MASCARAS (hardware específico de mi ESP32) debe usar HAL
 #define BTN_LEFT	18
 #define BTN_RIGHT	19
-#define INPUTS_INVERTED	false
-#define LED_STATE	2
+#define INPUTS_INVERTED	true
+#define LED_STATE	4
 #define LED_R 		13
 #define LED_G		12
 #define LED_B		14
 #define OUTPUTS_INVERTED true
 
-button_t left_button = {0};
-button_t right_button = {0};
 
 // API BSP
 void bsp_init(void); 
