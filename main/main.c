@@ -43,21 +43,20 @@ void app_main(void){
     {
         if(bsp_btn1_pressed()){
 			bsp_led_state_set(void);
+			
        		switch(color){
             case 0: bsp_rgb_set(1,0,0); break;
             case 1: bsp_rgb_set(0,1,0); break;
             case 2: bsp_rgb_set(0,0,1); break;
           }
-
             color = (color + 1) % 3;
 
-            vTaskDelay(pdMS_TO_TICKS(1000));
-          
+            vTaskDelay(pdMS_TO_TICKS(1000));     
         }
 
         if(bsp_btn2_pressed()){
 
-            bsp_init();
+           bsp_system_stop(void);
             vTaskDelay(pdMS_TO_TICKS(50));
         }
 

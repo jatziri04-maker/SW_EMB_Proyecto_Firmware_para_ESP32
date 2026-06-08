@@ -13,7 +13,7 @@ void bsp_init(void)
 	
 	gpio_read(BTN_LEFT);
 	gpio_write(LED_BUILTIN, false/true);
-	gpio_toggle(LED_BUILTIN);
+	gpio_toggle(LED_BUILTIN, false/true);
 	
 	Nota:
 	BTN_LEFT 	== Número de pin (18)
@@ -29,19 +29,20 @@ void bsp_init(void)
     bsp_gpio_config_out(LED_G,OUTPUTS_INVERTED);
     bsp_gpio_config_out(LED_B,OUTPUTS_INVERTED);
     
-    bsp_rgb_set(0,0,0);
-    gpio_write(LED_STATE, false);
+   
 }
 bool bsp_btn1_pressed(void)
 {
-	if(button_get_state(&right_button)) return button_was_pressed(&right_button);
-	else return 0;
+	if(button_get_state(&right_button)) {
+		return button_was_pressed(&right_button);
+	}else return 0;
 }
 
 bool bsp_btn2_pressed(void)
 {
-	if(button_get_state(&left_button))  return button_get_state(&left_button);
-    else return 0;
+	if(button_get_state(&left_button)) { 
+		return button_get_state(&left_button);
+    }else return 0;
 }
 
 void bsp_rgb_set(uint8_t r, uint8_t g, uint8_t b)
@@ -54,4 +55,9 @@ void bsp_rgb_set(uint8_t r, uint8_t g, uint8_t b)
 void bsp_led_state_set(void){
 	gpio_toggle(LED_STATE,false);
 	
+}
+
+void bsp_system_stop(void){
+	 bsp_rgb_set(0,0,0);
+    gpio_write(LED_STATE, 0);
 }

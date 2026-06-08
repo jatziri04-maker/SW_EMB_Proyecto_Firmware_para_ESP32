@@ -31,6 +31,7 @@ bool bsp_btn2_pressed(void);
 
 void bsp_rgb_set(uint8_t r, uint8_t g, uint8_t b);
 void bsp_led_state_set(void);
+void bsp_system_stop(void);
 
 #endif
 
