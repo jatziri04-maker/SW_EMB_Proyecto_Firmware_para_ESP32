@@ -10,14 +10,20 @@
 
 
 /**************************************************************************/
+// **** Variables globales:
+extern uint64_t inverted_gpios;
+
+
+
+/**************************************************************************/
 // **** Prototipos de funciones:
 
 // Funciones para configurar GPIOs como salidas binarias normales:
-void gpio_config_out(uint8_t gpio_num);
+void gpio_config_out(uint8_t gpio_num, uint8_t invert_logic);
 void gpio_config_out_bits(uint32_t gpio_bits);
 
 // Funciones para configurar GPIOs como entradas binarias normales:
-void gpio_config_in(uint8_t gpio_num, uint8_t pull_mode);
+void gpio_config_in(uint8_t gpio_num, uint8_t pull_mode, uint8_t invert_logic);
 void gpio_config_in_bits(uint32_t gpio_bits, uint8_t pull_mode);
 
 // Funciones para leer y escribir en pines GPIO compatibles:
