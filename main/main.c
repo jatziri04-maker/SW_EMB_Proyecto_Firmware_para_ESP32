@@ -12,11 +12,11 @@
 #include "gpio_2026.h"
 #define VERSION -2
 // VERSION >= 0	-> Pruebas de Jatziri
-//	- 0: 	Prueba de BSP.
+//	-> 0: 	Prueba de BSP.
 //
 // VERSION < 0	-> Pruebas de Alex
-//	- -1: 	Prueba simple de driver para GPIO.
-//	- -2: 	Prueba simple de HAL para GPIO.
+//	-> -1: 	Prueba simple de driver para GPIO.
+//	-> -2: 	Prueba simple de HAL para GPIO.
 
 
 
