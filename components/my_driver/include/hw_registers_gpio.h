@@ -229,13 +229,13 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 	(VALID_GPIO(gpio_num) ? hwreg32_io_mux[(gpio_num)] : 0x00)
 	
 #define REG_GPIO_PIN_X(gpio_num) \
-	(VALID_GPIO(gpio_num) ? (REG_GPIO_PIN_0 + (0x04)*(gpio_num)) : 0x00)
+	(VALID_GPIO(gpio_num) ? (REG_GPIO_PIN_0 + (gpio_num)) : 0x00)
 
 #define REG_GPIO_FUNC_X_IN_SEL_CFG(gpio_num) \
-	(VALID_GPIO(gpio_num) ? (REG_GPIO_FUNC_0_IN_SEL_CFG + (0x04)*(gpio_num)) : 0x00)
+	(VALID_GPIO(gpio_num) ? (REG_GPIO_FUNC_0_IN_SEL_CFG + (gpio_num)) : 0x00)
 
 #define REG_GPIO_FUNC_X_OUT_SEL_CFG(gpio_num) \
-	(VALID_GPIO_OUTPUT(gpio_num) ? (REG_GPIO_FUNC_0_OUT_SEL_CFG + (0x04)*(gpio_num)) : 0x00)
+	(VALID_GPIO_OUTPUT(gpio_num) ? (REG_GPIO_FUNC_0_OUT_SEL_CFG + (gpio_num)) : 0x00)
 
 
 // Macro - Funciones para configurar función de IO MUX (2: GPIO mode):

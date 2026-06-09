@@ -3,5 +3,7 @@ idf_component_register(
 		gpio_2026.c
 		gpio_interrupts.c
 	INCLUDE_DIRS "include"
+	REQUIRES
+		driver
 )
 

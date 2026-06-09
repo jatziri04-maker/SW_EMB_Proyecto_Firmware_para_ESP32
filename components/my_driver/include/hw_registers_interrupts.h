@@ -24,7 +24,7 @@
 // Registros para configurar interrupciones (contiguos para cada GPIO):
 #define REG_GPIO_PIN_0		HWREG32(0x3FF44088)
 #define REG_GPIO_PIN_X(gpio_num) \
-	(VALID_GPIO(gpio_num) ? (REG_GPIO_PIN_0 + (0x04)*(gpio_num)) : 0x00)
+	(VALID_GPIO(gpio_num) ? (REG_GPIO_PIN_0 + (gpio_num)) : 0x00)
 
 
 // Registros específicos para cada procesador:
@@ -46,6 +46,9 @@
 
 #define REG_DPORT_APP_GPIO_INTERRUPT_MAP		HWREG32(0x3FF00270)
 #define REG_DPORT_APP_GPIO_INTERRUPT_NMI_MAP	HWREG32(0x3FF00274)
+
+#define REG_DPORT_PRO_GPIO_INTERRUPT_MAP		HWREG32(0x3FF0015C)
+#define REG_DPORT_PRO_GPIO_INTERRUPT_NMI_MAP	HWREG32(0x3FF00160)
 
 // Registros de status de interrupción:
 // Nota: 	Todos son read-only. El registro de interés para interrupciones
@@ -106,8 +109,8 @@
 // (ej.: REG_DPORT_APP_GPIO_INTERRUPT_MAP):
 
 // DPORT_APP_X_MAP:
-#define DPORT_APP_X_MAP_MASK	(0x1F)
-#define DPORT_APP_X_MAP_SHIFT	(0)
+#define DPORT_CPU_X_MAP_MASK	(0x1F)
+#define DPORT_CPU_X_MAP_SHIFT	(0)
 // Opciones de interés:
 #define PERIPHERAL_EDGE_INTR_PRIORITY_1 (10)
 #define PERIPHERAL_EDGE_INTR_PRIORITY_3 (22)

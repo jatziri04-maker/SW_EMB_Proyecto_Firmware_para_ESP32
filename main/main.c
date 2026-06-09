@@ -177,9 +177,9 @@ void app_main(){
 	gpio_config_out(LED_BUILTIN, OUTPUTS_INVERTED);
 	
 	button_t left_button = {0};
-	button_init(&left_button, BTN_RIGHT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
+	button_init(&left_button, BTN_LEFT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
 	
-	gpio_config_in_intr(BTN_LEFT, INPUT_PULLUP_MODE, FALLING_EDGE, gpio_isr_handler_wrapper);
+	gpio_config_in_intr(BTN_RIGHT, INPUT_PULLUP_MODE, FALLING_EDGE, gpio_isr_handler_wrapper);
 	
 	while(true){
 		if(button_was_pressed(&left_button)){
@@ -192,14 +192,14 @@ void app_main(){
 			printf("Button pressed\n");
 		}
 			
-		printf("led_test_flag: %d\n", led_test_flag);
+		//printf("led_test_flag: %d\n", led_test_flag);
 		
-		
-		if(gpio_read(BTN_LEFT) == 0)
+		/*
+		if(gpio_read(BTN_RIGHT) == 0)
 			gpio_write(LED_BUILTIN, true);
 		else
  			gpio_write(LED_BUILTIN, false);
-		
+		*/
 		
 		vTaskDelay(pdMS_TO_TICKS(100));
 	}

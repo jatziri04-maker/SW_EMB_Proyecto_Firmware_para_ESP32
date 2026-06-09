@@ -1,15 +1,18 @@
 #include <stdint.h>
 #include <stdbool.h>
-
+#include <stdio.h>
+/*
 #include "rom/ets_sys.h"
 #include "esp_intr_alloc.h"
+#include "soc/interrupts.h"
+*/
+#include "driver/gpio.h"
 
 #include "hw_registers_general_macros.h"
 #include "hw_registers_gpio.h"
 #include "hw_registers_interrupts.h"
 #include "gpio_2026.h"
 #include "gpio_interrupts.h"
-#include "soc/interrupts.h"
 
 
 // **** Secciones del archivo:
@@ -81,13 +84,26 @@ void IRAM_ATTR gpio_isr_handler_wrapper(void *arg){
 void gpio_config_in_intr(uint8_t gpio_num, gpio_mode_e pull_mode, intr_type_e intr_type, void (*isr_handler_ptr)(void *args)){
 	
 	gpio_config_in(gpio_num, pull_mode, false);
+	/*
+    WRITE_REG_FIELD(
+        REG_GPIO_PIN_X(gpio_num),
+        GPIO_PIN_X_INT_TYPE_MASK, GPIO_PIN_X_INT_TYPE_SHIFT, intr_type
+    );
+    
 	
+	//printf("Error after this 1.\n");
 	
-	//gpio_config_intr_matrix(PERIPHERAL_EDGE_INTR_PRIORITY_4);	
+	gpio_config_intr_matrix(CPU_APP, PERIPHERAL_EDGE_INTR_PRIORITY_1);
+	//gpio_config_intr_matrix(CPU_APP, 4);
+	//printf("Error after this 2.\n");
 	
-	//gpio_register_isr_handler(isr_handler_ptr, 4);
+	gpio_register_isr_handler(isr_handler_ptr, 1);
+	//printf("Error after this 3.\n");
 	
-	//enable_cpu_interrupt(4);
+	enable_cpu_interrupt(1);
+	//printf("Error after this 4.\n");
+	
+	*/
 	
 	if(intr_type == DISABLED){
 		gpio_disable_intr(gpio_num);
@@ -96,8 +112,14 @@ void gpio_config_in_intr(uint8_t gpio_num, gpio_mode_e pull_mode, intr_type_e in
 	else{
 		gpio_enable_intr(gpio_num, INT_ENA_APP_IE, intr_type);
 	}
+	//printf("Error after this 5.\n");
 	
-	uint32_t intr_flags = ESP_INTR_FLAG_EDGE;
+	
+	
+	
+	
+	/*
+	uint32_t intr_flags = ESP_INTR_FLAG_EDGE | ESP_INTR_FLAG_IRAM;
 	
 	 esp_err_t ret = esp_intr_alloc(
 		ETS_GPIO_INTR_SOURCE, 
@@ -115,7 +137,21 @@ void gpio_config_in_intr(uint8_t gpio_num, gpio_mode_e pull_mode, intr_type_e in
     else{
 		printf("Interrupt configured\n");
 	}
+	*/
 	
+	
+	// Configure button as input with interrupt
+	
+    // Install ISR service (required for GPIO interrupts)
+    gpio_install_isr_service(0);
+    
+    // Add ISR handler for the button
+    gpio_isr_handler_add(gpio_num, isr_handler_ptr, NULL);  
+    
+    
+    
+    printf("Interrupcion configurada en GPIO %d\n", gpio_num);
+    
 	return;
 }
 
@@ -135,6 +171,20 @@ void gpio_disable_intr(uint8_t gpio_num){
 		GPIO_PIN_X_WAKEUP_ENABLE_BIT | GPIO_PIN_X_PAD_DRIVER_BIT
 	);
 	
+	if(gpio_num < 32)
+		SET_REG_BITS(REG_GPIO_STATUS_W1TC, REG_BIT_GPIO_X(gpio_num));
+	else
+ 		SET_REG_BITS(REG_GPIO_STATUS1_W1TC, REG_BIT_GPIO_X(gpio_num - 32));
+ 	
+ 	/*
+	printf(
+		"REG_GPIO_PIN_%d (%p) state: 0x%x\n\n", 
+		gpio_num,
+		REG_GPIO_PIN_X(gpio_num),
+		(unsigned int)READ_REG(REG_GPIO_PIN_X(gpio_num))
+	);
+	*/
+	
 	return;
 }
 
@@ -153,16 +203,40 @@ void gpio_enable_intr(uint8_t gpio_num, uint8_t int_ena_cfg, intr_type_e intr_ty
 		GPIO_PIN_X_WAKEUP_ENABLE_BIT | GPIO_PIN_X_PAD_DRIVER_BIT
 	);
 	
+	if(gpio_num < 32)
+		SET_REG_BITS(REG_GPIO_STATUS_W1TC, REG_BIT_GPIO_X(gpio_num));
+	else
+ 		SET_REG_BITS(REG_GPIO_STATUS1_W1TC, REG_BIT_GPIO_X(gpio_num - 32));
+ 		
+	printf(
+		"REG_GPIO_PIN_%d (%p) state: 0x%x\n\n", 
+		gpio_num,
+		REG_GPIO_PIN_X(gpio_num),
+		(unsigned int)READ_REG(REG_GPIO_PIN_X(gpio_num))
+	);
+	
 	return;
 }
 
 
 // Funciones para configurar la matriz de interrupciones:
-void gpio_config_intr_matrix(uint8_t cpu_interrupt){
-	WRITE_REG_FIELD(
-		REG_DPORT_APP_GPIO_INTERRUPT_MAP, 
-		DPORT_APP_X_MAP_MASK, DPORT_APP_X_MAP_SHIFT, cpu_interrupt
-	);
+void gpio_config_intr_matrix(cpu_type_e cpu_type, uint8_t cpu_interrupt){
+	if(cpu_type == CPU_PRO){
+		WRITE_REG_FIELD(
+			REG_DPORT_PRO_GPIO_INTERRUPT_MAP,
+			DPORT_CPU_X_MAP_MASK, DPORT_CPU_X_MAP_SHIFT, cpu_interrupt
+		);
+		
+		CLEAR_REG_BITS(REG_DPORT_PRO_INTR_STATUS_0, (1UL << 22));
+	}
+	else if(cpu_type == CPU_APP){
+		WRITE_REG_FIELD(
+			REG_DPORT_APP_GPIO_INTERRUPT_MAP, 
+			DPORT_CPU_X_MAP_MASK, DPORT_CPU_X_MAP_SHIFT, cpu_interrupt
+		);
+		
+		CLEAR_REG_BITS(REG_DPORT_APP_INTR_STATUS_0, (1UL << 22));
+	}
 	
 	return;
 }
@@ -170,8 +244,6 @@ void gpio_config_intr_matrix(uint8_t cpu_interrupt){
 
 // Función para enlazar ISR a la interrupción:
 void gpio_register_isr_handler(void (*isr_handler_ptr)(void *args), uint8_t level){
-	
-	uint32_t isr_address = (uint32_t)isr_handler_ptr;
 	
     volatile uint32_t *vector_reg;
     switch(level) {
@@ -185,7 +257,7 @@ void gpio_register_isr_handler(void (*isr_handler_ptr)(void *args), uint8_t leve
         default: return;
     }
 	
-	WRITE_REG(vector_reg, isr_address);
+	WRITE_REG(vector_reg, (uint32_t)isr_handler_ptr);
 	
 	return;
 }
@@ -193,17 +265,13 @@ void gpio_register_isr_handler(void (*isr_handler_ptr)(void *args), uint8_t leve
 
 // Función para habilitar interrupción en CPU:
 void enable_cpu_interrupt(uint8_t level){
-    // level should be 1-7, bit position = level
+    // level should be 1-7, bit position = levelvoid enable_cpu_interrupt(uint8_t level){
     uint32_t intr_bit = (1 << level);
-    /*
     __asm__ volatile (
-        "rsr    %0, intenable\n"  // Read current enables
-        "or     %0, %0, %1\n"     // OR with our bit
-        "wsr    %0, intenable\n"  // Write back
+        "rsr    %0, intenable\n"
+        "or     %0, %0, %1\n"
+        "wsr    %0, intenable\n"
         : "=&r"(intr_bit) 
         : "r"(intr_bit)
     );
-    */
-    
-	return;
 }

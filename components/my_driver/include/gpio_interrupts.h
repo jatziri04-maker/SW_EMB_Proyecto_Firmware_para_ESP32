@@ -25,6 +25,10 @@ typedef enum{
 	HIGH_LEVEL		= 5,
 } intr_type_e;
 
+typedef enum{
+	CPU_PRO = 0,
+	CPU_APP = 1
+} cpu_type_e;
 
 
 
@@ -49,7 +53,7 @@ void gpio_disable_intr(uint8_t gpio_num);
 void gpio_enable_intr(uint8_t gpio_num, uint8_t int_ena_cfg, intr_type_e intr_type);
 
 // Funciones para configurar la matriz de interrupciones:
-void gpio_config_intr_matrix(uint8_t cpu_interrupt);
+void gpio_config_intr_matrix(cpu_type_e cpu_type, uint8_t cpu_interrupt);
 
 // Función para enlazar ISR a la interrupción:
 void gpio_register_isr_handler(void (*isr_handler_ptr)(void *args), uint8_t level);
