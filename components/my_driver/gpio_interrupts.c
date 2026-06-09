@@ -1,15 +1,27 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "rom/ets_sys.h"
+#include "esp_intr_alloc.h"
+
 #include "hw_registers_general_macros.h"
 #include "hw_registers_gpio.h"
 #include "hw_registers_interrupts.h"
 #include "gpio_2026.h"
 #include "gpio_interrupts.h"
+#include "soc/interrupts.h"
 
 
 // **** Secciones del archivo:
 // - Definición de funciones para configurar GPIOs con interrupciones.
+
+
+
+
+/**************************************************************************/
+// **** Variables globales:
+
+uint8_t led_test_flag = 0;
 
 
 
@@ -50,9 +62,15 @@ void IRAM_ATTR gpio_isr_handler_wrapper(void *arg){
 		TOGGLE_OUTPUT_BITS(REG_BIT_GPIO_X(2));
 	}
 	*/
-	CLEAR_REG_BITS(REG_GPIO_STATUS, REG_BIT_GPIO_X(19));
-	TOGGLE_OUTPUT_BITS(REG_BIT_GPIO_X(2));
-		
+	
+	//CLEAR_REG_BITS(REG_GPIO_STATUS, REG_BIT_GPIO_X(19));
+	//TOGGLE_OUTPUT_BITS(REG_BIT_GPIO_X(2));
+	
+	uint8_t gpio_num = (uint8_t)(uint32_t)arg;
+	
+	SET_REG_BITS(REG_GPIO_STATUS_W1TC, REG_BIT_GPIO_X(gpio_num));
+	led_test_flag = 1;
+	
 	return;
 }
 
@@ -65,17 +83,38 @@ void gpio_config_in_intr(uint8_t gpio_num, gpio_mode_e pull_mode, intr_type_e in
 	gpio_config_in(gpio_num, pull_mode, false);
 	
 	
-	gpio_config_intr_matrix(PERIPHERAL_EDGE_INTR_PRIORITY_4);	
+	//gpio_config_intr_matrix(PERIPHERAL_EDGE_INTR_PRIORITY_4);	
 	
-	gpio_register_isr_handler(isr_handler_ptr, 4);
+	//gpio_register_isr_handler(isr_handler_ptr, 4);
 	
-	enable_cpu_interrupt(4);
+	//enable_cpu_interrupt(4);
 	
-	if(intr_type == DISABLED)
+	if(intr_type == DISABLED){
 		gpio_disable_intr(gpio_num);
-	else
+		return;		
+	}
+	else{
 		gpio_enable_intr(gpio_num, INT_ENA_APP_IE, intr_type);
+	}
 	
+	uint32_t intr_flags = ESP_INTR_FLAG_EDGE;
+	
+	 esp_err_t ret = esp_intr_alloc(
+		ETS_GPIO_INTR_SOURCE, 
+		intr_flags, 
+		isr_handler_ptr, 
+		(void*)(uint32_t)gpio_num, 
+		NULL
+	);
+	
+	
+    if(ret != ESP_OK) {
+        // Handle error - interrupt allocation failed
+        led_test_flag = 0xFF;  // Error indicator
+    }
+    else{
+		printf("Interrupt configured\n");
+	}
 	
 	return;
 }

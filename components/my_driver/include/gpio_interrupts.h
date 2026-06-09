@@ -29,6 +29,14 @@ typedef enum{
 
 
 /**************************************************************************/
+// **** Variables globales:
+
+extern uint8_t led_test_flag;
+
+
+
+
+/**************************************************************************/
 // **** Prototipos de funciones:
 
 void IRAM_ATTR gpio_isr_handler_wrapper(void *arg);

@@ -9,6 +9,7 @@
 */
 
 
+#include "gpio_2026.h"
 #define VERSION -2
 // VERSION >= 0	-> Pruebas de Jatziri
 //	- 0: 	Prueba de BSP.
@@ -170,19 +171,37 @@ void app_main(){
 
 void app_main(){
 	
+	vTaskDelay(pdMS_TO_TICKS(3000));
+	printf("Starting system...\n");
+	
 	gpio_config_out(LED_BUILTIN, OUTPUTS_INVERTED);
 	
 	button_t left_button = {0};
-	button_init(&left_button, BTN_LEFT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
+	button_init(&left_button, BTN_RIGHT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
 	
-	gpio_config_in_intr(BTN_RIGHT, INPUT_PULLUP_MODE, FALLING_EDGE, gpio_isr_handler_wrapper);
+	gpio_config_in_intr(BTN_LEFT, INPUT_PULLUP_MODE, FALLING_EDGE, gpio_isr_handler_wrapper);
 	
 	while(true){
 		if(button_was_pressed(&left_button)){
 			gpio_toggle(LED_BUILTIN);
 		}
 		
-		vTaskDelay(pdMS_TO_TICKS(10));
+		if(led_test_flag == 1){
+			led_test_flag = 0;
+			gpio_toggle(LED_BUILTIN);
+			printf("Button pressed\n");
+		}
+			
+		printf("led_test_flag: %d\n", led_test_flag);
+		
+		
+		if(gpio_read(BTN_LEFT) == 0)
+			gpio_write(LED_BUILTIN, true);
+		else
+ 			gpio_write(LED_BUILTIN, false);
+		
+		
+		vTaskDelay(pdMS_TO_TICKS(100));
 	}
 	
 	return;

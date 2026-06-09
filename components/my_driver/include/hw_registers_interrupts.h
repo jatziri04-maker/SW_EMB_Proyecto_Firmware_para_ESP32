@@ -18,6 +18,8 @@
 #define REG_GPIO_STATUS		HWREG32(0x3FF44044) // GPIO 0-31
 #define REG_GPIO_STATUS1	HWREG32(0x3FF44050) // GPIO 32-39
 
+#define REG_GPIO_STATUS_W1TC	HWREG32(0x3FF44048)
+#define REG_GPIO_STATUS1_W1TC	HWREG32(0x3FF44054)
 
 // Registros para configurar interrupciones (contiguos para cada GPIO):
 #define REG_GPIO_PIN_0		HWREG32(0x3FF44088)
