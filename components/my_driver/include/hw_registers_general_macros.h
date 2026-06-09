@@ -52,6 +52,8 @@
 #define WRITE_REG_FIELD(hwreg32, mask, mask_shift, value) \
     ((*hwreg32) = ((*hwreg32) & ~(mask)) | ((value << mask_shift) & (mask)))
 
+#define WRITE_REG(hwreg32, value) \
+	((*hwreg32) = (value))
 
 
 #endif /* HW_REGISTERS_GENERAL_MACROS_H */

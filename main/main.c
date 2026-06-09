@@ -147,6 +147,8 @@ void app_main(){
 #include "esp_attr.h"
 
 #include "my_driver.h"
+#include "hw_registers_interrupts.h"
+#include "gpio_interrupts.h"
 #include "my_HAL.h"
 #include "hal_button.h"
 
@@ -166,7 +168,6 @@ void app_main(){
 
 
 
-
 void app_main(){
 	
 	gpio_config_out(LED_BUILTIN, OUTPUTS_INVERTED);
@@ -174,6 +175,7 @@ void app_main(){
 	button_t left_button = {0};
 	button_init(&left_button, BTN_LEFT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
 	
+	gpio_config_in_intr(BTN_RIGHT, INPUT_PULLUP_MODE, FALLING_EDGE, gpio_isr_handler_wrapper);
 	
 	while(true){
 		if(button_was_pressed(&left_button)){
