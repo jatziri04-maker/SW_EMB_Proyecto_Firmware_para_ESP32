@@ -6,7 +6,7 @@
  * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
  */
 
-#define VERSION 0
+#define VERSION 2
 /*
  *VERSION 0 a 3 pruebas de Jatziri				VERSION 	CARACTERÍSTICAS
  *													0		Secuencia simple (sin RTOS)
@@ -112,7 +112,12 @@ void app_main(void)
 
 
 #elif VERSION == 2
-
+#include <stdio.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 //Manda a llamar a la capa BSP 
 #include "my_bsp.h"
 
@@ -202,7 +207,13 @@ void app_main(void){
 
 
 #elif VERSION == 3
-
+#include <stdio.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+//Manda a llamar a la capa BSP 
 #include "my_bsp.h"
 
 SemaphoreHandle_t mutex_RGB; //Declaración de "semáforo mutex" para proteger variables compartidas entre tareas. 
