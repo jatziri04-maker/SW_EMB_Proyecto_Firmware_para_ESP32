@@ -15,8 +15,8 @@ button_t left_button = {0};
 button_t right_button = {0};
 
 /**
- *Function: bsp_init() 
- *@brief Esta funcion inicializa los botones y LEDs 
+ *@Function: bsp_init() 
+ *@brief Esta funcion inicializa los botones y LEDs especificar unpoco mássobre el contenido
  *@param[in] void
  *@return void  
 */
@@ -111,6 +111,6 @@ void bsp_led_state_set(void){
 void bsp_system_stop(void){
 	 bsp_rgb_set(0,0,0);
     gpio_write(LED_STATE_4, 0);
-    gpio_write(LED_STATE_16, 0);
-    gpio_write(LED_STATE_17, 0);
+    gpio_write(LED_16, 0);
+    gpio_write(LED_17, 0);
 }
