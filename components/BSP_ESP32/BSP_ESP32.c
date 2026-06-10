@@ -111,6 +111,6 @@ void bsp_led_state_set(void){
 void bsp_system_stop(void){
 	 bsp_rgb_set(0,0,0);
     gpio_write(LED_STATE_4, 0);
-    gpio_write(LED_STATE_16, 0);
-    gpio_write(LED_STATE_17, 0);
+    gpio_write(LED_16, 0);
+    gpio_write(LED_17, 0);
 }
