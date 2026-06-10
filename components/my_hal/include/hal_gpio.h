@@ -4,15 +4,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "driver_gpio.h"
-#include "hal_button.h"
-#include "hal_led.h"
 
 
 // **** Secciones del archivo:
 // - Tipos de datos.
 // - Variables globales.
-// - Prototipos de funciones para configurar GPIOs como LEDs.
-// - Prototipos de funciones para manipular y leer LEDs.
+// - Prototipos de funciones para configurar GPIOs genérico.
+// - Prototipos de funciones para manipular y leer GPIO.
 
 
 
@@ -37,125 +35,111 @@ typedef enum{
 	
 } gpio_object_type_e;
 
+
 typedef struct{
 	uint8_t 	_pin;
 	gpio_mode_e	_mode;
-	bool		_inverted_logic;
+	bool		_invert_logic;
 } gpio_base_t;
 
-typedef struct{
-	gpio_base_t	_gpio;
-	bool		_state;
-	bool		_past_state;
-	bool		_future_state;
-	uint32_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_bool_t;
 
 typedef struct{
-	gpio_base_t	_gpio;
-	uint8_t		_state;
-	uint8_t		_past_state;
-	uint8_t		_future_state;
-	uint32_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_uint8_t;
+	gpio_base_t 		_gpio;
+	
+	union{
+		bool		bool_val;
+		
+		uint8_t		u8_val;
+		uint16_t	u16_val;
+		uint32_t	u32_val;
+		uint64_t	u64_val;
+		
+		int8_t		s8_val;
+		int16_t		s16_val;
+		int32_t		s32_val;
+		int64_t		s64_val;
+		
+		float		float_val;
+		double		double_val;
+	} state, past_state, future_state;
+	
+	uint32_t			_last_change_time_ms;
+	gpio_object_type_e 	_type;
+} gpio_generic_t;
 
-typedef struct{
-	gpio_base_t	_gpio;
-	uint16_t		_state;
-	uint16_t		_past_state;
-	uint16_t		_future_state;
-	uint32_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_uint16_t;
+typedef gpio_generic_t* gpio_ptr;
 
-typedef struct{
-	gpio_base_t	_gpio;
-	uint32_t		_state;
-	uint32_t		_past_state;
-	uint32_t		_future_state;
-	uint32_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_uint32_t;
 
-typedef struct{
-	gpio_base_t	_gpio;
-	uint64_t		_state;
-	uint64_t		_past_state;
-	uint64_t		_future_state;
-	uint64_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_uint64_t;
 
-typedef struct{
-	gpio_base_t	_gpio;
-	int8_t		_state;
-	int8_t		_past_state;
-	int8_t		_future_state;
-	uint32_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_int8_t;
 
-typedef struct{
-	gpio_base_t	_gpio;
-	int16_t		_state;
-	int16_t		_past_state;
-	int16_t		_future_state;
-	uint32_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_int16_t;
+/**************************************************************************/
+// **** Variables globales:
 
-typedef struct{
-	gpio_base_t	_gpio;
-	int32_t		_state;
-	int32_t		_past_state;
-	int32_t		_future_state;
-	uint32_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_int32_t;
+extern uint32_t LAST_CHANGE_MIN_TIME_MS;
 
-typedef struct{
-	gpio_base_t	_gpio;
-	int64_t		_state;
-	int64_t		_past_state;
-	int64_t		_future_state;
-	uint32_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_int64_t;
-
-typedef struct{
-	gpio_base_t	_gpio;
-	float		_state;
-	float		_past_state;
-	float		_future_state;
-	uint32_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_float_t;
-
-typedef struct{
-	gpio_base_t	_gpio;
-	double		_state;
-	double		_past_state;
-	double		_future_state;
-	uint32_t	_last_change_time_ms;
-	gpio_object_type_e _type;
-} gpio_double_t;
-
-typedef void* gpio_ptr;
-typedef void* gpio_state;
 
 
 
 /**************************************************************************/
 // **** Prototipos globales:
 
-// Función para configurar GPIO:
-void hal_gpio_init(void *gpio);
+// **** Función para configurar GPIO:
+void hal_gpio_init(gpio_ptr gpio, gpio_object_type_e type, uint8_t pin, gpio_mode_e mode, bool invert_logic);
 
-// Funciones para manipular y leer estado de GPIO:
-void *hal_gpio_get_state(void *gpio);
+// **** Funciones para manipular y leer estado de GPIO:
 
+// Funciones para leer estado:
+bool 		hal_gpio_bool_get_state(gpio_ptr gpio);
+uint8_t 	hal_gpio_u8_get_state(gpio_ptr gpio);
+uint16_t 	hal_gpio_u16_get_state(gpio_ptr gpio);
+uint32_t 	hal_gpio_u32_get_state(gpio_ptr gpio);
+uint64_t 	hal_gpio_u64_get_state(gpio_ptr gpio);
+
+int8_t 	hal_gpio_s8_get_state(gpio_ptr gpio);
+int16_t	hal_gpio_s16_get_state(gpio_ptr gpio);
+int32_t hal_gpio_s32_get_state(gpio_ptr gpio);
+int64_t hal_gpio_s64_get_state(gpio_ptr gpio);
+
+float 	hal_gpio_float_get_state(gpio_ptr gpio);
+double 	hal_gpio_double_get_state(gpio_ptr gpio);
+
+
+// Funciones para leer estado pasado:
+bool 		hal_gpio_bool_get_past_state(gpio_ptr gpio);
+uint8_t 	hal_gpio_u8_get_past_state(gpio_ptr gpio);
+uint16_t 	hal_gpio_u16_get_past_state(gpio_ptr gpio);
+uint32_t 	hal_gpio_u32_get_past_state(gpio_ptr gpio);
+uint64_t 	hal_gpio_u64_get_past_state(gpio_ptr gpio);
+
+int8_t 		hal_gpio_s8_get_past_state(gpio_ptr gpio);
+int16_t		hal_gpio_s16_get_past_state(gpio_ptr gpio);
+int32_t 	hal_gpio_s32_get_past_state(gpio_ptr gpio);
+int64_t 	hal_gpio_s64_get_past_state(gpio_ptr gpio);
+
+float 		hal_gpio_float_get_past_state(gpio_ptr gpio);
+double 		hal_gpio_double_get_past_state(gpio_ptr gpio);
+
+
+// Funciones para manipular estado:
+void hal_gpio_bool_set_state(gpio_ptr gpio, bool state);
+void hal_gpio_u8_set_state(gpio_ptr gpio, uint8_t state);
+void hal_gpio_u16_set_state(gpio_ptr gpio, uint16_t state);
+void hal_gpio_u32_set_state(gpio_ptr gpio, uint32_t state);
+void hal_gpio_u64_set_state(gpio_ptr gpio, uint64_t state);
+
+void hal_gpio_s8_set_state(gpio_ptr gpio, int8_t state);
+void hal_gpio_s16_set_state(gpio_ptr gpio, int16_t state);
+void hal_gpio_s32_set_state(gpio_ptr gpio, int32_t state);
+void hal_gpio_s64_set_state(gpio_ptr gpio, int64_t state);
+
+void hal_gpio_float_set_state(gpio_ptr gpio, float state);
+void hal_gpio_double_set_state(gpio_ptr gpio, double state);
+
+
+// Funciones para actualizar estado pasado y detectar transiciones:
+void hal_gpio_set_past_state(gpio_ptr gpio);
+
+bool hal_gpio_was_changed(gpio_ptr gpio);
 
 
 
