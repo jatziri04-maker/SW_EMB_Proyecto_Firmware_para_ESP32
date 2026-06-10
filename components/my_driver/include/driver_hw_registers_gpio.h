@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#include "driver_hw_registers_general.h"
+
 // **** Secciones del archivo:
 // - Registros de hardware usados para la configuración de GPIOs.
 // - Bit masks para registros GPIO.
@@ -15,8 +17,6 @@
 
 /**************************************************************************/
 // **** Registros de hardware usados para la configuración de GPIOs:
-
-#define HWREG32(x) ((volatile uint32_t*)(x))
 
 // Registro - GPIO - Enable:
 #define REG_GPIO_ENABLE 	HWREG32(0x3FF44020)
@@ -140,10 +140,6 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 /**************************************************************************/
 // **** Bit masks para registros:
 
-// Bit mask - Pines en registros GPIO comúnes (ej.: REG_GPIO_ENABLE):
-#define REG_BIT_GPIO_X(gpio_num) (1UL << (gpio_num))
-
-
 // Bit mask - Bits de los registros IO MUX (entradas):
 #define REG_IO_MUX_INPUT_EN_BIT		(1 << 9)	// FUN_IE REG: Input enable of pin: 1 = enabled.
 #define REG_IO_MUX_PULL_UP_EN_BIT 	(1 << 8) 	// FUN_WPU REG: 1 = internal pull-up enabled.
@@ -204,29 +200,6 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 /**************************************************************************/
 // **** Macro funciones:
 
-// Macro - Funciones para validar número de GPIO:
-#define VALID_GPIO(gpio_num) \
-	((((int8_t)gpio_num) >= 0 	&& (gpio_num) <= 19) || \
-	 ((gpio_num) >= 21 	&& (gpio_num) <= 23) || \
-	 ((gpio_num) >= 25 	&& (gpio_num) <= 27) || \
-	 ((gpio_num) >= 32 	&& (gpio_num) <= 39))
-	 
- #define VALID_GPIO_OUTPUT(gpio_num) \
-	((((int8_t)gpio_num) >= 0 	&& (gpio_num) <= 19) || \
-	 ((gpio_num) >= 21 	&& (gpio_num) <= 23) || \
-	 ((gpio_num) >= 25 	&& (gpio_num) <= 27) || \
-	 ((gpio_num) >= 32 	&& (gpio_num) <= 33))
-// Nota: GPIOs 34, 35, 36 y 39 solo pueden ser usados como entradas.
-
-
-// Macro - Funciones para poner en 1 o 0 bits específicos en registros:
-#define SET_ADDRESS_BITS(address, bits) 	(*HWREG32(address) |= (bits))
-#define SET_REG_BITS(hwreg32, bits)			(*(hwreg32) |= (bits))
-
-#define CLEAR_ADDRESS_BITS(address, bits) 	(*HWREG32(address) &= ~(bits))
-#define CLEAR_REG_BITS(hwreg32, bits)		(*(hwreg32) &= ~(bits))
-
-
 // Macro - Funciones para poner en 1 o 0 bits del registro REG_GPIO_ENABLE:
 #define SET_GPIO_ENABLE_BITS(bits)		(*REG_GPIO_ENABLE |= (bits))
 #define CLEAR_GPIO_ENABLE_BITS(bits)		(*REG_GPIO_ENABLE &= ~(bits))
@@ -239,14 +212,6 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 #define SET_OUTPUT_BITS(bits)		(*REG_GPIO_OUT |= (bits))
 #define CLEAR_OUTPUT_BITS(bits)		(*REG_GPIO_OUT &= ~(bits))
 #define TOGGLE_OUTPUT_BITS(bits)	(*REG_GPIO_OUT ^= (bits))
-
-
-// Macro - Funciones para leer registros:
-#define READ_ADDRESS(address)			(*HWREG32(address))
-#define READ_ADDRESS_BIT(address, bit)	(READ_ADDRESS(address) & bit)
-
-#define READ_REG(hwreg32)				(*hwreg32)
-#define READ_REG_BIT(hwreg32, bit)		((READ_REG(hwreg32) & bit) != 0)
 
 #define READ_INPUT_PIN(gpio_num)								\
 	(READ_REG_BIT(											\
@@ -264,13 +229,13 @@ static volatile uint32_t* const hwreg32_io_mux[] = {
 	(VALID_GPIO(gpio_num) ? hwreg32_io_mux[(gpio_num)] : 0x00)
 	
 #define REG_GPIO_PIN_X(gpio_num) \
-	(VALID_GPIO(gpio_num) ? (REG_GPIO_PIN_0 + (0x04)*(gpio_num)) : 0x00)
+	(VALID_GPIO(gpio_num) ? (REG_GPIO_PIN_0 + (gpio_num)) : 0x00)
 
 #define REG_GPIO_FUNC_X_IN_SEL_CFG(gpio_num) \
-	(VALID_GPIO(gpio_num) ? (REG_GPIO_FUNC_0_IN_SEL_CFG + (0x04)*(gpio_num)) : 0x00)
+	(VALID_GPIO(gpio_num) ? (REG_GPIO_FUNC_0_IN_SEL_CFG + (gpio_num)) : 0x00)
 
 #define REG_GPIO_FUNC_X_OUT_SEL_CFG(gpio_num) \
-	(VALID_GPIO_OUTPUT(gpio_num) ? (REG_GPIO_FUNC_0_OUT_SEL_CFG + (0x04)*(gpio_num)) : 0x00)
+	(VALID_GPIO_OUTPUT(gpio_num) ? (REG_GPIO_FUNC_0_OUT_SEL_CFG + (gpio_num)) : 0x00)
 
 
 // Macro - Funciones para configurar función de IO MUX (2: GPIO mode):

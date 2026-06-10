@@ -1,7 +1,12 @@
 #include <stdint.h>
 #include <stdio.h>
-#include "hw_registers_gpio.h"
-#include "gpio_2026.h"
+#include "driver_hw_registers_gpio.h"
+#include "driver_gpio.h"
+
+
+// **** Secciones del archivo:
+// - Variables globales.
+// - Definición de funciones para configurar GPIOs.
 
 
 
@@ -22,7 +27,7 @@ uint64_t inverted_gpios = 0x00000000;
 
 // Funciones para configurar GPIOs como salidas binarias normales:
 
-void gpio_config_out(uint8_t gpio_num, uint8_t invert_logic){
+void driver_gpio_config_out(uint8_t gpio_num, uint8_t invert_logic){
 	
 	if(!VALID_GPIO_OUTPUT(gpio_num)) return;
 	
@@ -64,12 +69,12 @@ void gpio_config_out(uint8_t gpio_num, uint8_t invert_logic){
 	return;
 }
 
-void gpio_config_out_bits(uint32_t gpio_bits){
+void driver_gpio_config_out_bits(uint32_t gpio_bits){
 	uint8_t i;
 	
 	for(i = 0; i < 40; i++){
 		if((gpio_bits >> i) & 1)
-			gpio_config_out(i, 0);
+			driver_gpio_config_out(i, 0);
 	}
 	return;
 }
@@ -77,7 +82,7 @@ void gpio_config_out_bits(uint32_t gpio_bits){
 
 // Funciones para configurar GPIOs como entradas binarias normales:
 
-void gpio_config_in(uint8_t gpio_num, gpio_mode_e pull_mode, uint8_t invert_logic){
+void driver_gpio_config_in(uint8_t gpio_num, gpio_mode_e pull_mode, uint8_t invert_logic){
 	
 	if(!VALID_GPIO(gpio_num)) return;
 	if(
@@ -136,19 +141,19 @@ void gpio_config_in(uint8_t gpio_num, gpio_mode_e pull_mode, uint8_t invert_logi
 	return;
 }
 
-void gpio_config_in_bits(uint32_t gpio_bits, gpio_mode_e pull_mode){
+void driver_gpio_config_in_bits(uint32_t gpio_bits, gpio_mode_e pull_mode){
 	uint8_t i;
 	
 	for(i = 0; i < 40; i++){
 		if((gpio_bits >> i) & 1)
-			gpio_config_in(i, pull_mode, 0);
+			driver_gpio_config_in(i, pull_mode, 0);
 	}
 	return;
 }
 
 
 // Funciones para leer y escribir en pines GPIO compatibles:
-uint8_t gpio_read(uint8_t gpio_num){
+uint8_t driver_gpio_read(uint8_t gpio_num){
 	if(READ_REG_BIT(REG_GPIO_ENABLE, REG_BIT_GPIO_X(gpio_num)) == GPIO_INPUT){
 		// Bit leído == 0 (Entrada):
 		return READ_INPUT_PIN(gpio_num) ^ ((inverted_gpios >> gpio_num) & 1);
@@ -159,7 +164,7 @@ uint8_t gpio_read(uint8_t gpio_num){
 	}	
 }
 
-void gpio_write(uint8_t gpio_num, uint8_t state){
+void driver_gpio_write(uint8_t gpio_num, uint8_t state){
 	// Si el GPIO está configurado como entrada en el registro de habilitación,
 	// no escribe nada y retorna:
 	if(READ_REG_BIT(REG_GPIO_ENABLE, REG_BIT_GPIO_X(gpio_num)) == GPIO_INPUT)
@@ -174,7 +179,7 @@ void gpio_write(uint8_t gpio_num, uint8_t state){
 	return;
 }
 
-uint8_t gpio_toggle(uint8_t gpio_num){
+uint8_t driver_gpio_toggle(uint8_t gpio_num){
 	// Si el GPIO está configurado como salida en el registro de habilitación,
 	// escribe el valor opuesto al estado actual y lo retorna:
 	if(READ_REG_BIT(REG_GPIO_ENABLE, REG_BIT_GPIO_X(gpio_num)) == GPIO_OUTPUT){
@@ -184,7 +189,7 @@ uint8_t gpio_toggle(uint8_t gpio_num){
 	return 0;
 }
 
-uint8_t has_inverted_logic(uint8_t gpio_num){
+uint8_t driver_has_inverted_logic(uint8_t gpio_num){
 	return (inverted_gpios >> gpio_num) & 1;
 }
 
