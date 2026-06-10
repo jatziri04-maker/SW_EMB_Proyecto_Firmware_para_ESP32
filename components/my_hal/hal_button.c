@@ -21,7 +21,7 @@ uint16_t DEBOUNCE_TIME_MS = 200;
 // **** Definiciones de funciones:
 
 // Función para configurar GPIO como botón:
-void hal_button_init(button_t* btn, uint8_t pin, gpio_mode_e pull_mode, uint8_t invert_logic){
+void hal_button_init(button_t* btn, uint8_t pin, gpio_mode_e pull_mode, bool invert_logic){
 	btn->_pin 			= pin;
 	btn->_state			= false;
 	btn->_past_state	= false;

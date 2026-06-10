@@ -5,8 +5,6 @@
  * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
  */
 #include <stdio.h>
-#include "my_driver.h"
-#include "my_hal.h"
 #include "my_bsp.h"
 
 
@@ -31,8 +29,8 @@ button_t right_button = {0};
 // **** Definición de funciones:
 
 /**
- *Function: bsp_init() 
- *@brief Esta funcion inicializa los botones y LEDs 
+ *@Function: bsp_init() 
+ *@brief Esta funcion inicializa los botones(GPIO 18 y 19) y LEDs (GPIO 2,4,5,16,17,12,13,14)
  *@param[in] void
  *@return void  
 */
@@ -66,8 +64,9 @@ void bsp_init(void){
 
 
 /**
- *Function: bsp_btn1_pressed()
+ *@Function: bsp_btn1_pressed()
  *@brief Funcion para leer el cambio de estado del boton1 en GPIO18 y determinar si se ha presionado
+ *para usarla hay que declarar un objeto para el botón button_t left_button = {0};
  *@param[in] void
  *@return bool: true = si fue presionado, false = si no se presionó 
 */
@@ -76,8 +75,9 @@ bool bsp_btn1_pressed(void){
 }
 
 /**
- *Function: bsp_btn2_pressed()
+ *@Function: bsp_btn2_pressed()
  *@brief Funcion para leer el cambio de estado del boton1 en GPIO19 y determinar si se ha presionado
+ *para usarla hay que declarar un objeto para el botón button_t right_button = {0};
  *@param[in] void
  *@return bool: true = si fue presionado, false = si no se presionó 
 */
@@ -87,7 +87,7 @@ bool bsp_btn2_pressed(void){
 
 
 /**
- *Function: bsp_rgb_set(uint8_t r, uint8_t g, uint8_t b)
+ *@Function: bsp_rgb_set(uint8_t r, uint8_t g, uint8_t b)
  *@brief Fución para escribir los colores del led rgb 
  *@param[in] entero sin signo de 8 bits, uno por cada color (3), se pone a 1 el color que se vaya a prender y 0 los demás para dejarlos apagados
  *@return void
@@ -100,7 +100,7 @@ void bsp_rgb_set(uint8_t r, uint8_t g, uint8_t b){
 
 
 /**
- *Function: bsp_led_state_set()
+ *@Function: bsp_led_state_set()
  *@brief Función para Led indicador de estado, parpadea o enciende haciendo un toggle
  *@param[in] void
  *@return void
@@ -111,9 +111,9 @@ void bsp_led_state_set(void){
 		
 }
 
-//Función de paro del sistema
+
 /**
- *Function: bsp_system_stop()
+ *@Function: bsp_system_stop()
  *@brief Función de paro del sistema apaga todos los leds 
  *@param[in] void
  *@return void
