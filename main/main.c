@@ -142,9 +142,8 @@ void app_main(){
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_attr.h"
+//#include "freertos/FreeRTOS.h"
+//#include "freertos/task.h"
 
 #include "my_driver.h"
 #include "my_hal.h"
@@ -185,14 +184,14 @@ void app_main(){
 		INPUT_PULLUP_MODE, 
 		INPUTS_INVERTED
 	);
-	/*
+	
 	gpio_config_in_intr(
 		BTN_RIGHT, 
 		INPUT_PULLUP_MODE, 
 		FALLING_EDGE, 
 		gpio_isr_handler_wrapper
 	);
-	*/
+	/*
 	timer_init(
 		TIMG_0_TIMER_0, 
 		8000, 
@@ -201,6 +200,7 @@ void app_main(){
 		1000000,
 		timer_isr_handler_wrapper
 	);
+	*/
 	
 	
 	

@@ -7,8 +7,9 @@ idf_component_register(
     	.
     PRIV_INCLUDE_DIRS   # optional, add here private include directories
     REQUIRES 
+    PRIV_REQUIRES       # optional, list the private requirements
     	my_driver 
     	my_hal
+    	BSP_ESP32
     	freertos
-    PRIV_REQUIRES       # optional, list the private requirements
 )
