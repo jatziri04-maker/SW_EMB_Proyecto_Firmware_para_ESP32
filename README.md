@@ -4,13 +4,13 @@
 
 ##### **Descripción**
 
-Se desarrolló un firmware modular para el ESP32 que controla un LED RGB (ánodo o cátodo común) mediante dos botones push, aplicando una arquitectura de software por capas (Driver, BSP, HAL) y utilizando Git con un flujo de trabajo basado en ramas y Pull Requests para gestionar el versionamiento del código. 
+Se desarrolló un firmware modular para el ESP32 que controla un LED RGB (ánodo o cátodo común) mediante dos botones push, aplicando una arquitectura de software por capas (Driver, BSP, HAL) y utilizando Git con un flujo de trabajo basado en ramas y Pull Requests para gestionar el versionamiento de código.
 
 
 
 ###### **Diseño de la arquitectura por capas**
 
-El firmware se estructuró siguiendo una arquitectura por capas, lo que permite una clara separación de responsabilidades, facilita el mantenimiento y la portabilidad del código. A continuación se describe cada una de las capas implementadas, desde el nivel más bajo (hardware) hasta el nivel más alto (aplicación). 
+El firmware se estructuró siguiendo una arquitectura por capas, lo que permite una clara separación de responsabilidades, facilita el mantenimiento y la portabilidad del código. A continuación se describe cada una de las capas implementadas, desde el nivel más bajo (hardware) hasta el nivel más alto (aplicación).
 
 * **Capa Drivers:** lógica de control del LED RGB (encender/apagar colores) y lectura con debounce de botones a nivel de registros.
 * **Capa HAL:** funciones de bajo nivel para configurar GPIO (entrada/salida, interrupciones y timer).
@@ -19,14 +19,12 @@ El firmware se estructuró siguiendo una arquitectura por capas, lo que permite 
 
 
 
-Este proyecto: "Firmware para ESP32 con arquitectura por capas y control de versiones con Git", es una experiencia formativa completa que integra conceptos teóricos (arquitectura de software embebido, sistemas de control de versiones) con prácticas concretas de desarrollo (programación de registros de hardware, implementación de HAL, gestión de ramas y PRs). Resulta en un firmware funcional, bien estructurado y documentado, que sienta una base sólida para proyectos más complejos en el ámbito de Internet de las Cosas (IoT), robótica y automatización. 
+Este proyecto: "Firmware para ESP32 con arquitectura por capas y control de versiones con Git", es una experiencia formativa completa que integra conceptos teóricos (arquitectura de software embebido, sistemas de control de versiones) con prácticas concretas de desarrollo (programación de registros de hardware, implementación de HAL, gestión de ramas y PRs). Resulta en un firmware funcional, bien estructurado y documentado, que sienta una base sólida para proyectos más complejos en el ámbito de Internet de las Cosas (IoT), robótica y automatización.
 
 
 
-Autores 
+**Autores:**
 
 * Jatziri Romero (22061040)
 * Abdiel Rodríguez (22061055)
-
-
 
