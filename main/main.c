@@ -149,7 +149,7 @@ void task_boton(void *pvParameter){
            system_run = false;
             
         }
-        xSemaphoreGive(mutex_RGB);//Libera el mutex para que otras tareas puedan acceder a las variables compartidas.
+        xSemaphoreGive(mutex_RGB);//Libera el mutex para que otras tareas puedan acceder a las variables compartidas
         vTaskDelay(pdMS_TO_TICKS(10));
 	}
 	
