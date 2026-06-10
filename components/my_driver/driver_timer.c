@@ -1,7 +1,13 @@
+/**
+ * CAPA DRIVER
+ * \b Description: Archivo driver_timer.c donde se definen las funciones para configurar y manipular timers.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #include <stdint.h>
 #include <stdbool.h>
 
-//#include "rom/ets_sys.h"
 #include "esp_intr_alloc.h"
 #include "soc/interrupts.h"
 

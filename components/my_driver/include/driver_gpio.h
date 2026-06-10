@@ -1,3 +1,10 @@
+/**
+ * CAPA DRIVER
+ * \b Description: Archivo driver_gpio.h donde se definen tipos de datos, variables globales y prototipos de funciones para manipular y leer pines GPIO digitales.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #ifndef GPIO_2026_H
 #define GPIO_2026_H
 

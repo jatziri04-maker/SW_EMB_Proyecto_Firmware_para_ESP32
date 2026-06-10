@@ -1,3 +1,10 @@
+/**
+ * CAPA DRIVER
+ * \b Description: Archivo my_driver.h donde se incluyen todos los archivos de cabecera que forman parte del componente my_driver.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #ifndef MY_DRIVER_H
 #define MY_DRIVER_H
 

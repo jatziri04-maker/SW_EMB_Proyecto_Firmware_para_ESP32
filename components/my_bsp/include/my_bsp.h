@@ -4,7 +4,7 @@
  *integrados en la tarjeta, los RGB (en GPIOS 12,13,Y 14) y otros 5 LEDS
  *
  * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
- */
+*/
 
 /*Archivos de cabecera*/
 #ifndef MY_BSP_H

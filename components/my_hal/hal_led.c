@@ -1,3 +1,10 @@
+/**
+ * CAPA HAL (Hardware Abstraction Layer)
+ * \b Description: Archivo hal_led.c donde se definen las funciones para configurar y manipular LEDs.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #include <stdint.h>
 #include <stdbool.h>
 

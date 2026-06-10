@@ -1,10 +1,16 @@
+/**
+ * CAPA DRIVER
+ * \b Description: Archivo driver_timer.h donde se definen tipos de datos, variables globales y prototipos de funciones para configurar y manipular timers.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #ifndef MY_TIMER_H
 #define MY_TIMER_H
 
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "driver_gpio_interrupts.h"
 #include "driver_hw_registers_interrupts.h"
 
 

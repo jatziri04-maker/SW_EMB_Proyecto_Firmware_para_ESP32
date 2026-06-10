@@ -1,3 +1,10 @@
+/**
+ * CAPA DRIVER
+ * \b Description: Archivo driver_hw_registers_interrupts.h donde se definen punteros a registros, máscaras de bits y macro funciones para configurar registros de interrupciones de GPIO.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #ifndef HW_REGISTERS_INTERRUPTS_H
 #define HW_REGISTERS_INTERRUPTS_H
 

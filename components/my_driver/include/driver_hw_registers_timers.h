@@ -1,3 +1,10 @@
+/**
+ * CAPA DRIVER
+ * \b Description: Archivo driver_hw_registers_timers.h donde se definen punteros a registros, máscaras de bits y macro funciones para configurar registros de timers.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #ifndef HW_REGISTERS_TIMERS_H
 #define HW_REGISTERS_TIMERS_H
 

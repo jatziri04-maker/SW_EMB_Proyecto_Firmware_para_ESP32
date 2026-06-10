@@ -1,3 +1,10 @@
+/**
+ * CAPA HAL (Hardware Abstraction Layer)
+ * \b Description: Archivo hal_button.h donde se definen los tipos de datos, variables globales y prototipos de funciones para configurar y manipular botones.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #ifndef HAL_BUTTON_H
 #define HAL_BUTTON_H
 

@@ -1,3 +1,10 @@
+/**
+ * CAPA HAL (Hardware Abstraction Layer)
+ * \b Description: Archivo hal_gpio.h donde se definen los tipos de datos, variables globales y prototipos de funciones para configurar y manipular pines GPIO de manera general.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #ifndef HAL_GPIO_H
 #define HAL_GPIO_H
 

@@ -1,3 +1,10 @@
+/**
+ * CAPA DRIVER
+ * \b Description: Archivo driver_gpio_interrupts.h donde se definen tipos de datos, variables globales y prototipos de funciones para configurar interrupciones en pines GPIO.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #ifndef GPIO_INTERRUPTS_H
 #define GPIO_INTERRUPTS_H
 

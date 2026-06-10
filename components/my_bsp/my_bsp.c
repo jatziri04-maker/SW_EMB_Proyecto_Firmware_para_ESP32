@@ -3,7 +3,7 @@
  *\b Description: archivo BSP.c donde se construyen las funciones para inicializar los GPIOS de la ESP32-PANTHER48
  *
  * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
- */
+*/
 #include <stdio.h>
 #include "my_bsp.h"
 

@@ -1,3 +1,10 @@
+/**
+ * CAPA DRIVER
+ * \b Description: Archivo driver_hw_registers_general.h donde se definen macro funciones para manipular y leer registros.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #ifndef HW_REGISTERS_GENERAL_MACROS_H
 #define HW_REGISTERS_GENERAL_MACROS_H
 

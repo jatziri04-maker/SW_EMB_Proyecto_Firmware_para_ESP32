@@ -1,3 +1,10 @@
+/**
+ * CAPA HAL (Hardware Abstraction Layer)
+ * \b Description: Archivo hal_button.c donde se definen las funciones para configurar y manipular botones.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -5,6 +12,13 @@
 
 #include "driver_gpio.h"
 #include "hal_button.h"
+
+
+// **** Secciones del archivo:
+// - Variables globales.
+// - Funciones para configurar GPIOs como botones.
+// - Funciones para manipular y leer estado de botones.
+// - Funciones para ver si el botón ha sido presionado.
 
 
 

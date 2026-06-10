@@ -1,3 +1,10 @@
+/**
+ * CAPA HAL (Hardware Abstraction Layer)
+ * \b Description: Archivo hal_gpio.c donde se definen las funciones para configurar y manipular pines GPIO de manera general.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>

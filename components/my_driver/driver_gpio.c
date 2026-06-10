@@ -1,3 +1,10 @@
+/**
+ * CAPA DRIVER
+ * \b Description: Archivo driver_gpio.c donde se definen las funciones para manipular y leer pines GPIO digitales.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #include <stdint.h>
 #include <stdio.h>
 #include "driver_hw_registers_gpio.h"

@@ -1,3 +1,10 @@
+/**
+ * CAPA DRIVER
+ * \b Description: Archivo driver_gpio_interrupts.h donde se definen las funciones para configurar y manipular interrupciones de pines GPIO.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -32,7 +39,12 @@ uint8_t led_test_flag = 0;
 /**************************************************************************/
 // **** Funciones para configurar GPIOs con interrupciones:
 
-// ISR default para manejar las interrupciones:
+/**
+ *@function: 	driver_gpio_isr_handler_wrapper()
+ *@brief 		ISR default para manejar las interrupciones de GPIO.
+ *@param[in] 	void *arg Puntero a argumento de tipo genérico.
+ *@return 		void
+*/
 void IRAM_ATTR driver_gpio_isr_handler_wrapper(void *arg){
 	
 	/*
@@ -79,8 +91,14 @@ void IRAM_ATTR driver_gpio_isr_handler_wrapper(void *arg){
 
 
 
-// Funciones generales para configurar entrada con interrupciones:
+// Función general para configurar GPIO como entrada con interrupción:
 
+/**
+ *@function: 	driver_gpio_config_in_intr()
+ *@brief 		ISR default para manejar las interrupciones de GPIO.
+ *@param[in] 	uint8_t gpio_num, gpio_mode_e pull_mode, intr_type_e intr_type, void (*isr_handler_ptr)(void *args)
+ *@return 		void
+*/
 void driver_gpio_config_in_intr(uint8_t gpio_num, gpio_mode_e pull_mode, intr_type_e intr_type, void (*isr_handler_ptr)(void *args)){
 	
 	driver_gpio_config_in(gpio_num, pull_mode, false);

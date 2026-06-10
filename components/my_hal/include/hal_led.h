@@ -1,3 +1,10 @@
+/**
+ * CAPA HAL (Hardware Abstraction Layer)
+ * \b Description: Archivo hal_led.h donde se definen los tipos de datos, variables globales y prototipos de funciones para configurar y manipular LEDs.
+ *
+ * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
+*/
+
 #ifndef HAL_LED_H
 #define HAL_LED_H
 

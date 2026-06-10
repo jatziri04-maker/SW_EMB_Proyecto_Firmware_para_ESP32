@@ -6,8 +6,7 @@
  * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
  */
 
-
-#define VERSION 2
+#define VERSION -2
 
 /*
  *VERSION 0 a 3 pruebas de Jatziri				VERSION 	CARACTERÍSTICAS
@@ -16,7 +15,7 @@
  *													2		Secuencia con RTOS y MUTEX
  *													3		Secuencia con RTOS,MUTEX y variables TickType_t
  *
- *VERDION -1 y -2 Pruebas de Alex					-1		Prueba simple de driver para GPIO.
+ *VERSION -1 y -2 Pruebas de Alex					-1		Prueba simple de driver para GPIO.
  *													-2		Prueba simple de HAL para GPIO.
 */
 
