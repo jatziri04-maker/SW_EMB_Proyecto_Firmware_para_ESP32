@@ -18,17 +18,15 @@
  *													-2		Prueba simple de HAL para GPIO.
 */
 
-
 #if VERSION == 0
-
-/*#include <stdio.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"*/
+#include "freertos/task.h"
 //Manda a llamar a la capa BSP 
-#include "BSP_ESP32.h"
+#include "my_bsp.h"
 
 void app_main(void){
 	
@@ -37,23 +35,21 @@ void app_main(void){
     uint8_t cont_color = 0;
     printf("wait button... \n\n");
 
-    while(true)
-    {
-        if(bsp_btn1_pressed()){
+    while(true){
+		
+		if(bsp_btn1_pressed()){
 			printf("boton 1 pressed\n");
 			printf("Starting system...\n\n");
 			system_run = true;
 			//cont_color = 1;
 			bsp_led_state_set();
 		}
-		
 		else if(bsp_btn2_pressed()){
 			printf("boton 2 pressed\n");
 			printf("System stop...\n\n");
-           bsp_system_stop();
-           cont_color = 0; 
-           system_run = false;
-            
+			bsp_system_stop();
+			cont_color = 0; 
+			system_run = false;
         }
         
 		if(system_run){
@@ -62,7 +58,7 @@ void app_main(void){
 	            case 1: bsp_rgb_set(1,0,0);  break;
 	            case 2: bsp_rgb_set(0,1,0);  break;
 	            case 3: bsp_rgb_set(0,0,1);  break;
-	            
+	            default: break;
             }
             
             vTaskDelay(pdMS_TO_TICKS(1000));  
@@ -78,7 +74,7 @@ void app_main(void){
 
 #elif VERSION == 1
 
-#include "BSP_ESP32.h"
+#include "my_bsp.h"
 
 void app_main(void)
 {
@@ -118,7 +114,7 @@ void app_main(void)
 #elif VERSION == 2
 
 //Manda a llamar a la capa BSP 
-#include "BSP_ESP32.h"
+#include "my_bsp.h"
 
  SemaphoreHandle_t mutex_RGB;
 
@@ -208,7 +204,7 @@ void app_main(void){
 
 #elif VERSION == 3
 
-#include "BSP_ESP32.h"
+#include "my_bsp.h"
 
 SemaphoreHandle_t mutex_RGB; //Declaración de "semáforo mutex" para proteger variables compartidas entre tareas. 
 bool system_run = false; //bandera de estado de sistema
@@ -315,23 +311,23 @@ void app_main(){
 	//vTaskDelay(pdMS_TO_TICKS(5000));
 	//printf("Starting system...\n\n");
 	
-	gpio_config_out(LED_BUILTIN, OUTPUTS_INVERTED);
-	gpio_config_out(LED_YELLOW, OUTPUTS_INVERTED);
-	gpio_config_out(LED_RED, OUTPUTS_INVERTED);
+	driver_gpio_config_out(LED_BUILTIN, OUTPUTS_INVERTED);
+	driver_gpio_config_out(LED_YELLOW, OUTPUTS_INVERTED);
+	driver_gpio_config_out(LED_RED, OUTPUTS_INVERTED);
 	
-	gpio_config_in(BTN_LEFT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
-	gpio_config_in(BTN_RIGHT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
+	driver_gpio_config_in(BTN_LEFT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
+	driver_gpio_config_in(BTN_RIGHT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
 	
 	while(true){
-		if(gpio_read(BTN_LEFT) == 0){
-			gpio_write(LED_BUILTIN, true);
-			gpio_write(LED_YELLOW, true);
-			gpio_write(LED_RED, true);
+		if(driver_gpio_read(BTN_LEFT) == 0){
+			driver_gpio_write(LED_BUILTIN, true);
+			driver_gpio_write(LED_YELLOW, true);
+			driver_gpio_write(LED_RED, true);
 		}
 		else{
-			gpio_write(LED_BUILTIN, false);
-			gpio_write(LED_YELLOW, false);
-			gpio_write(LED_RED, false);
+			driver_gpio_write(LED_BUILTIN, false);
+			driver_gpio_write(LED_YELLOW, false);
+			driver_gpio_write(LED_RED, false);
 		}
 		
 		
@@ -352,13 +348,15 @@ void app_main(){
 
 #include <stdio.h>
 #include <stdbool.h>
-#include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 #include "my_driver.h"
-#include "my_HAL.h"
-#include "hal_button.h"
+#include "my_hal.h"
+
+//#include "hal_button.h"
+//#include "driver_hw_registers_interrupts.h"
+//#include "driver_gpio_interrupts.h"
 
 
 
@@ -372,26 +370,67 @@ void app_main(){
 #define BTN_LEFT	18
 #define BTN_RIGHT	19
 
-#define INPUTS_INVERTED	false
-
+#define INPUTS_INVERTED	true
 
 
 
 void app_main(){
 	
-	gpio_config_out(LED_BUILTIN, OUTPUTS_INVERTED);
+	//vTaskDelay(pdMS_TO_TICKS(3000));
+	printf("Starting system...\n");
+	
+	driver_gpio_config_out(LED_BUILTIN, OUTPUTS_INVERTED);
+	driver_gpio_config_out(LED_YELLOW, OUTPUTS_INVERTED);
+	
 	
 	button_t left_button = {0};
-	button_init(&left_button, BTN_LEFT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
+	hal_button_init(
+		&left_button, 
+		BTN_LEFT, 
+		INPUT_PULLUP_MODE, 
+		INPUTS_INVERTED
+	);
+	
+	driver_gpio_config_in_intr(
+		BTN_RIGHT, 
+		INPUT_PULLUP_MODE, 
+		FALLING_EDGE, 
+		driver_gpio_isr_handler_wrapper
+	);
+	/*
+	timer_init(
+		TIMG_0_TIMER_0, 
+		8000, 
+		true, 
+		true, 
+		1000000,
+		timer_isr_handler_wrapper
+	);
+	*/
+	
+	
 	
 	
 	while(true){
-		if(button_was_pressed(&left_button)){
-			gpio_toggle(LED_BUILTIN);
+		if(hal_button_was_pressed(&left_button)){
+			driver_gpio_toggle(LED_BUILTIN);
 		}
 		
+		if(led_test_flag == 1){
+			led_test_flag = 0;
+			driver_gpio_toggle(LED_BUILTIN);
+			printf("Button pressed\n");
+		}
 		
-		vTaskDelay(pdMS_TO_TICKS(10));
+		if(led_test_flag_timer == 1){
+			led_test_flag_timer = 0;
+			driver_gpio_toggle(LED_YELLOW);
+			printf("Timer interruption. Counter: %llu\n", counted_ticks);
+		}
+		
+		printf("Timer 0 counter: %llu\n", timer_get_counter(TIMG_0_TIMER_0));
+		
+		vTaskDelay(pdMS_TO_TICKS(100));
 	}
 	
 	return;

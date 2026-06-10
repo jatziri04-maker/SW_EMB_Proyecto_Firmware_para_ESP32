@@ -7,35 +7,51 @@
  */
 
 /*Archivos de cabecera*/
-#ifndef BSP_GPIO_H
-#define BSP_GPIO_H
-#include <stdio.h>
+#ifndef MY_BSP_H
+#define MY_BSP_H
+
+
+#include <stdint.h>
 #include <stdbool.h>
-#include <unistd.h>
-#include <stdio.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
-#include "hal_button.h"
-#include "gpio_2026.h"
 
-// MAPEOS (hardware específico de la tarjeta ESP32-PANTHER48 ) debe usar HAL
+// **** Secciones del archivo:
+// - Constantes de pines.
+// - Definición de funciones para configurar y manejar la tarjeta.
+
+
+
+
+/**************************************************************************/
+// **** Constantes de pines:
+
+// MAPEOS (hardware específico de la tarjeta ESP32-PANTHER48 ) debe usar HAL:
+
+// Pines de entrada:
 #define BTN_LEFT	18
 #define BTN_RIGHT	19
+
 #define INPUTS_INVERTED	true
+
+// Pines de salidas:
+#define LED_2		2
 #define LED_STATE_4	4
+#define LED_5		5
+#define LED_16		16
+#define LED_17		17
+
 #define LED_R 		14
 #define LED_G		12
 #define LED_B		13
-#define LED_5		5
-#define LED_2		2
-#define LED_16		16
-#define LED_17		17
 
 #define OUTPUTS_INVERTED true
 
 
-//Prototipos de funciones de BSP
+
+
+/**************************************************************************/
+// **** Prototipos de funciones de BSP:
+
 void bsp_init(void); 
 bool bsp_btn1_pressed(void);
 bool bsp_btn2_pressed(void);
@@ -44,5 +60,5 @@ void bsp_rgb_set(uint8_t r, uint8_t g, uint8_t b);
 void bsp_led_state_set(void);
 void bsp_system_stop(void);
 
-#endif
 
+#endif /* MY_BSP_H */
