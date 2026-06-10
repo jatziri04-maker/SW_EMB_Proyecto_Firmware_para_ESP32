@@ -10,6 +10,7 @@
 
 
 #include "gpio_2026.h"
+#include "my_timer.h"
 #define VERSION -2
 // VERSION >= 0	-> Pruebas de Jatziri
 //	- 0: 	Prueba de BSP.
@@ -148,8 +149,8 @@ void app_main(){
 #include "esp_attr.h"
 
 #include "my_driver.h"
-#include "hw_registers_interrupts.h"
-#include "gpio_interrupts.h"
+//#include "hw_registers_interrupts.h"
+//#include "gpio_interrupts.h"
 #include "my_HAL.h"
 #include "hal_button.h"
 
@@ -171,15 +172,39 @@ void app_main(){
 
 void app_main(){
 	
-	vTaskDelay(pdMS_TO_TICKS(3000));
+	//vTaskDelay(pdMS_TO_TICKS(3000));
 	printf("Starting system...\n");
 	
 	gpio_config_out(LED_BUILTIN, OUTPUTS_INVERTED);
+	gpio_config_out(LED_YELLOW, OUTPUTS_INVERTED);
+	
 	
 	button_t left_button = {0};
-	button_init(&left_button, BTN_LEFT, INPUT_PULLUP_MODE, INPUTS_INVERTED);
+	button_init(
+		&left_button, 
+		BTN_LEFT, 
+		INPUT_PULLUP_MODE, 
+		INPUTS_INVERTED
+	);
+	/*
+	gpio_config_in_intr(
+		BTN_RIGHT, 
+		INPUT_PULLUP_MODE, 
+		FALLING_EDGE, 
+		gpio_isr_handler_wrapper
+	);
+	*/
+	timer_init(
+		TIMG_0_TIMER_0, 
+		8000, 
+		true, 
+		true, 
+		1000000,
+		timer_isr_handler_wrapper
+	);
 	
-	gpio_config_in_intr(BTN_RIGHT, INPUT_PULLUP_MODE, FALLING_EDGE, gpio_isr_handler_wrapper);
+	
+	
 	
 	while(true){
 		if(button_was_pressed(&left_button)){
@@ -191,15 +216,14 @@ void app_main(){
 			gpio_toggle(LED_BUILTIN);
 			printf("Button pressed\n");
 		}
-			
-		//printf("led_test_flag: %d\n", led_test_flag);
 		
-		/*
-		if(gpio_read(BTN_RIGHT) == 0)
-			gpio_write(LED_BUILTIN, true);
-		else
- 			gpio_write(LED_BUILTIN, false);
-		*/
+		if(led_test_flag_timer == 1){
+			led_test_flag_timer = 0;
+			gpio_toggle(LED_YELLOW);
+			printf("Timer interruption. Counter: %llu\n", counted_ticks);
+		}
+		
+		printf("Timer 0 counter: %llu\n", timer_get_counter(TIMG_0_TIMER_0));
 		
 		vTaskDelay(pdMS_TO_TICKS(100));
 	}

@@ -9,13 +9,13 @@
 #include "driver/gpio.h"
 
 #include "hw_registers_general_macros.h"
-#include "hw_registers_gpio.h"
 #include "hw_registers_interrupts.h"
 #include "gpio_2026.h"
 #include "gpio_interrupts.h"
 
 
 // **** Secciones del archivo:
+// - Variables globales.
 // - Definición de funciones para configurar GPIOs con interrupciones.
 
 
@@ -146,7 +146,7 @@ void gpio_config_in_intr(uint8_t gpio_num, gpio_mode_e pull_mode, intr_type_e in
     gpio_install_isr_service(0);
     
     // Add ISR handler for the button
-    gpio_isr_handler_add(gpio_num, isr_handler_ptr, NULL);  
+    gpio_isr_handler_add(gpio_num, isr_handler_ptr, (void*)(uint32_t)gpio_num);  
     
     
     
