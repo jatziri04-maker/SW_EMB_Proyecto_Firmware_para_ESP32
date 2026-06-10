@@ -1,10 +1,10 @@
 idf_component_register(
 	SRCS 
-		gpio_2026.c
-		gpio_interrupts.c
-		my_timer.c
+		driver_gpio_2026.c
+		driver_gpio_interrupts.c
+		driver_timer.c
 	INCLUDE_DIRS "include"
 	REQUIRES
-		driver
+		driver/gpio.h
 )
 

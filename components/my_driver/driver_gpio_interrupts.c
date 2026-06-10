@@ -8,10 +8,10 @@
 */
 #include "driver/gpio.h"
 
-#include "hw_registers_general_macros.h"
-#include "hw_registers_interrupts.h"
-#include "gpio_2026.h"
-#include "gpio_interrupts.h"
+#include "driver_hw_registers_general.h"
+#include "driver_hw_registers_interrupts.h"
+#include "driver_gpio.h"
+#include "driver_gpio_interrupts.h"
 
 
 // **** Secciones del archivo:

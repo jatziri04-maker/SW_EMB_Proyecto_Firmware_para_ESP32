@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "gpio_interrupts.h"
-#include "hw_registers_interrupts.h"
+#include "driver_gpio_interrupts.h"
+#include "driver_hw_registers_interrupts.h"
 
 
 

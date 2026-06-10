@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#include "hw_registers_interrupts.h"
-#include "gpio_2026.h"
+#include "driver_hw_registers_interrupts.h"
+#include "driver_gpio.h"
 
 // **** Secciones del archivo:
 // - Tipos de datos.

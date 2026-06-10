@@ -5,9 +5,9 @@
 #include "esp_intr_alloc.h"
 #include "soc/interrupts.h"
 
-#include "hw_registers_general_macros.h"
-#include "hw_registers_timers.h"
-#include "my_timer.h"
+#include "driver_hw_registers_general.h"
+#include "driver_hw_registers_timers.h"
+#include "driver_timer.h"
 
 
 

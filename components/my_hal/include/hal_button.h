@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "gpio_2026.h"
+#include "driver_gpio.h"
 
 // **** Secciones del archivo:
 // - Tipos de datos.

@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
-#include "hw_registers_gpio.h"
-#include "gpio_2026.h"
+#include "driver_hw_registers_gpio.h"
+#include "driver_gpio.h"
 
 
 

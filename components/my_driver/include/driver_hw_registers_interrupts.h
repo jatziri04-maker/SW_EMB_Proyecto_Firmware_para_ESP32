@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "hw_registers_general_macros.h"
+#include "driver_hw_registers_general.h"
 
 // **** Secciones del archivo:
 // - Registros usados para la configuración de GPIOs para interrupciones.

@@ -2,5 +2,6 @@
 #define HAL_GPIO_H
 
 #include "hal_gpio.h"
+#include "hal_button.h"
 
 #endif

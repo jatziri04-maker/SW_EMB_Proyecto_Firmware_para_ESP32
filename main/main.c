@@ -9,8 +9,6 @@
 */
 
 
-#include "gpio_2026.h"
-#include "my_timer.h"
 #define VERSION -2
 // VERSION >= 0	-> Pruebas de Jatziri
 //	- 0: 	Prueba de BSP.
@@ -149,10 +147,11 @@ void app_main(){
 #include "esp_attr.h"
 
 #include "my_driver.h"
+#include "my_hal.h"
+
+//#include "hal_button.h"
 //#include "hw_registers_interrupts.h"
 //#include "gpio_interrupts.h"
-#include "my_HAL.h"
-#include "hal_button.h"
 
 
 
