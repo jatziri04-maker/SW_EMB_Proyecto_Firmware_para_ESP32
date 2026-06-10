@@ -211,8 +211,8 @@ void driver_timer_init(timer_e timer, uint16_t prescaler, bool incremental, bool
 	// Configura el incremento y autorecarga:
 	SET_REG_BITS(
 		REG_TIMER_CONFIG(timer_base_reg), 
-		(REG_TIMER_CONFIG_INCREASE_BIT 		& incremental) |
-		(REG_TIMER_CONFIG_AUTORELOAD_BIT 	& self_reload)
+		((incremental == true) ? REG_TIMER_CONFIG_INCREASE_BIT : 0) |
+		((self_reload == true) ? REG_TIMER_CONFIG_AUTORELOAD_BIT : 0)
 	);
 	
 	
@@ -287,10 +287,21 @@ void driver_timer_init(timer_e timer, uint16_t prescaler, bool incremental, bool
 	printf("UPDATE reg: %p\n", REG_TIMER_UPDATE(timer_base_reg));
 	printf("Expected: %p\n", (void*)((uint32_t)timer_base_reg + 0x0C));
 	
+	
+	printf(
+		"Timer %d (%p) state: 0x%x\n\n", 
+		(int)timer,
+		REG_TIMER_CONFIG(timer_base_reg),
+		(unsigned int)READ_REG(REG_TIMER_CONFIG(timer_base_reg))
+	);
+	
 	SET_REG_BITS(
 		REG_TIMER_CONFIG(timer_base_reg), 
 		REG_TIMER_CONFIG_EN_BIT
 	);
+	
+	printf("Timer %d configured.\n", (int)timer);
+	
 	
 	return;
 }
