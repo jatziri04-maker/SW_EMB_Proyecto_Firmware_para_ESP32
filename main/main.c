@@ -6,7 +6,9 @@
  * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
  */
 
-#define VERSION -2
+
+#define VERSION 2
+
 /*
  *VERSION 0 a 3 pruebas de Jatziri				VERSION 	CARACTERÍSTICAS
  *													0		Secuencia simple (sin RTOS)
@@ -112,27 +114,31 @@ void app_main(void)
 
 
 #elif VERSION == 2
-
+#include <stdio.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 //Manda a llamar a la capa BSP 
 #include "my_bsp.h"
 
- SemaphoreHandle_t mutex_RGB;
+ SemaphoreHandle_t mutex_RGB; //Declaración de "semáforo mutex" para proteger variables compartidas entre tareas. 
 
- bool system_run = false;
+ bool system_run = false;//bandera de estado de sistema
  uint8_t cont_color = 0;
  
  
 void setup(){
-	bsp_init();
-	mutex_RGB =xSemaphoreCreateMutex();
-    xSemaphoreGive(mutex_RGB);
+	bsp_init();//función de BSP que inicializa Gpios
+	mutex_RGB =xSemaphoreCreateMutex();//Crea un mutex (candado) para proteger variables compartidas
     printf("wait button... \n\n");
 }
 
 
 void task_boton(void *pvParameter){
 	while(true){
-		xSemaphoreTake(mutex_RGB, portMAX_DELAY);
+		xSemaphoreTake(mutex_RGB, portMAX_DELAY);//Toma el mutex (lo bloquea). Si otro mutex lo tiene, espera indefinidamente (portMAX_DELAY)
 		
 		  if(bsp_btn1_pressed()){
 			printf("boton 1 pressed\n");
@@ -150,7 +156,7 @@ void task_boton(void *pvParameter){
            system_run = false;
             
         }
-        xSemaphoreGive(mutex_RGB);
+        xSemaphoreGive(mutex_RGB);//Libera el mutex para que otras tareas puedan acceder a las variables compartidas
         vTaskDelay(pdMS_TO_TICKS(10));
 	}
 	
@@ -203,7 +209,13 @@ void app_main(void){
 
 
 #elif VERSION == 3
-
+#include <stdio.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+//Manda a llamar a la capa BSP 
 #include "my_bsp.h"
 
 SemaphoreHandle_t mutex_RGB; //Declaración de "semáforo mutex" para proteger variables compartidas entre tareas. 
