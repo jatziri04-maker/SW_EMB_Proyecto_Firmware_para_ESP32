@@ -121,7 +121,7 @@ void bsp_led_state_set(void){
 
 /**
  *@Function: bsp_system_stop()
- *@brief Función de paro del sistema apaga todos los leds 
+ *@brief Función de paro del sistema apaga todos los leds
  *@param[in] void
  *@return void
 */

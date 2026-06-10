@@ -6,7 +6,9 @@
  * @author Jatziri Dennise Romero Bustillos y Abdiel Alejandro Rodríguez Coronado
  */
 
+
 #define VERSION 2
+
 /*
  *VERSION 0 a 3 pruebas de Jatziri				VERSION 	CARACTERÍSTICAS
  *													0		Secuencia simple (sin RTOS)
@@ -400,23 +402,24 @@ void app_main(){
 		INPUT_PULLUP_MODE, 
 		INPUTS_INVERTED
 	);
-	
+	/*
 	driver_gpio_config_in_intr(
 		BTN_RIGHT, 
 		INPUT_PULLUP_MODE, 
 		FALLING_EDGE, 
 		driver_gpio_isr_handler_wrapper
 	);
-	/*
-	timer_init(
+	*/
+	
+	driver_timer_init(
 		TIMG_0_TIMER_0, 
-		8000, 
+		80, 
 		true, 
 		true, 
 		1000000,
-		timer_isr_handler_wrapper
+		driver_tmr_isr_handler_wrapper
 	);
-	*/
+	
 	
 	
 	
@@ -438,7 +441,7 @@ void app_main(){
 			printf("Timer interruption. Counter: %llu\n", counted_ticks);
 		}
 		
-		printf("Timer 0 counter: %llu\n", timer_get_counter(TIMG_0_TIMER_0));
+		printf("Timer 0 counter: %llu\n", driver_timer_get_counter(TIMG_0_TIMER_0));
 		
 		vTaskDelay(pdMS_TO_TICKS(100));
 	}
