@@ -1,4 +1,4 @@
-# \# Firmware diseñado por nivel de capas para la ESP32-PANTHER48
+# Firmware diseñado por nivel de capas para la ESP32-PANTHER48
 
 
 
