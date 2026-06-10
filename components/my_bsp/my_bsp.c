@@ -66,6 +66,7 @@ void bsp_init(void){
 /**
  *@Function: bsp_btn1_pressed()
  *@brief Funcion para leer el cambio de estado del boton1 en GPIO18 y determinar si se ha presionado
+ *para usarla hay que declarar un objeto para el botón button_t left_button = {0};
  *@param[in] void
  *@return bool: true = si fue presionado, false = si no se presionó 
 */
@@ -76,7 +77,7 @@ bool bsp_btn1_pressed(void){
 /**
  *@Function: bsp_btn2_pressed()
  *@brief Funcion para leer el cambio de estado del boton1 en GPIO19 y determinar si se ha presionado
- *para usarla hay que declarar un objeto para el botón button_t left_button = {0};
+ *para usarla hay que declarar un objeto para el botón button_t right_button = {0};
  *@param[in] void
  *@return bool: true = si fue presionado, false = si no se presionó 
 */
