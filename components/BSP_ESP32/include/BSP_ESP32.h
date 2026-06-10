@@ -10,12 +10,12 @@ para poder llevar a cabo la aplicación
 #include <stdbool.h>
 #include <stdint.h>
 // MAPEOS/MASCARA (hardware específico de mi ESP32)
-#define BTN1   (1<<18)
-#define BTN2   (1<<19)
+#define BTN1   18
+#define BTN2   19
 
-#define LED_R  (1<<12)
-#define LED_G  (1<<13)
-#define LED_B  (1<<14)
+#define LED_R  12
+#define LED_G  13
+#define LED_B  14
 // API BSP
 void bsp_init(void);
 

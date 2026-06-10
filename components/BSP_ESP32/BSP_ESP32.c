@@ -20,27 +20,27 @@ void bsp_init(void)
 	
 	*/
 	
-    j_gpio_config_in(&IO_MUX_GPIO18_REG, BTN1, PULL_WPD);
-    j_gpio_config_in(&IO_MUX_GPIO19_REG, BTN2, PULL_WPD);
+    gpio_config_in(BTN1, INPUT_PULLUP_MODE, true);
+    gpio_config_in(BTN2, INPUT_PULLUP_MODE, true);
 
-    j_gpio_config_out(&IO_MUX_GPIO12_REG, LED_R);
-    j_gpio_config_out(&IO_MUX_GPIO13_REG, LED_G);
-    j_gpio_config_out(&IO_MUX_GPIO14_REG, LED_B);
+    gpio_config_out(LED_R, true);
+    gpio_config_out(LED_G, true);
+    gpio_config_out(LED_B, true);
 }
 
 bool bsp_btn1_pressed(void)
 {
-    return j_gpio_read(BTN1);
+    return gpio_read(BTN1);
 }
 
 bool bsp_btn2_pressed(void)
 {
-    return j_gpio_read(BTN2);
+    return gpio_read(BTN2);
 }
 
 void bsp_rgb_set(uint8_t r, uint8_t g, uint8_t b)
 {
-    j_gpio_write(LED_R, r);
-    j_gpio_write(LED_G, g);
-    j_gpio_write(LED_B, b);
+    gpio_write(LED_R, r);
+    gpio_write(LED_G, g);
+    gpio_write(LED_B, b);
 }

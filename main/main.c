@@ -142,8 +142,8 @@ void app_main(){
 
 #include <stdio.h>
 #include <stdbool.h>
-//#include "freertos/FreeRTOS.h"
-//#include "freertos/task.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 #include "my_driver.h"
 #include "my_hal.h"

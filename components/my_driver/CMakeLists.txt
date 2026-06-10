@@ -5,6 +5,6 @@ idf_component_register(
 		driver_timer.c
 	INCLUDE_DIRS "include"
 	REQUIRES
-		driver/gpio.h
+		driver
 )
 
