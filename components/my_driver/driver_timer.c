@@ -22,6 +22,8 @@
 /**************************************************************************/
 // **** Variables globales:
 
+uint8_t timers_in_use = 0x0;
+
 uint8_t led_test_flag_timer = 0;
 uint64_t counted_ticks = 0;
 
@@ -34,41 +36,6 @@ uint64_t counted_ticks = 0;
 // ISR default:
 void IRAM_ATTR driver_tmr_isr_handler_wrapper(void *arg){
 	
-	timer_e timer = (timer_e)(uint32_t)arg;
-	
-	volatile uint32_t *timer_base_reg	= REG_TIMG_0_T0_BASE;
-	volatile uint32_t *timg_base_reg 	= REG_TIMG_0_BASE;
-	
-	// Se limpia la interrupción:
-	WRITE_REG(
-		REG_TIMG_N_INT_CLR(timg_base_reg), 
-		REG_TIMG_INT_T0_INT_CLR
-	);
-	
-	// Se rehabilita la alarma del timer manualmente:
-	SET_REG_BITS(
-		REG_TIMER_CONFIG(timer_base_reg), 
-		REG_TIMER_CONFIG_ALARM_EN_BIT
-	);
-	
-	// Se fuerza la actualización:
-	WRITE_REG(
-		REG_TIMER_UPDATE(timer_base_reg), 0x1
-	);
-	
-	// Lee conteo:
-	uint64_t lo = READ_REG(
-		REG_TIMER_LO(timer_base_reg)
-	);
-	
-	uint64_t hi = READ_REG(
-		REG_TIMER_HI(timer_base_reg)
-	);
-	
-	counted_ticks = (hi << 32) | lo;
-	
-	led_test_flag_timer = 1;
-	/*
 	timer_e timer = (timer_e)(uint32_t)arg;
 	
 	volatile uint32_t *timer_base_reg;
@@ -126,24 +93,29 @@ void IRAM_ATTR driver_tmr_isr_handler_wrapper(void *arg){
 	counted_ticks = (hi << 32) | lo;
 	
 	led_test_flag_timer = 1;
-	*/
 	
-	/*
-    timer_e timer = (timer_e)(uint32_t)arg;
-    
-    // Get timer group base
-    uint32_t timg_base = (timer == TIMG_0_TIMER_0 || timer == TIMG_0_TIMER_1) ? 0x3FF5F000 : 0x3FF60000;
-    uint32_t clr_bit = (timer == TIMG_0_TIMER_0 || timer == TIMG_1_TIMER_0) ? (1 << 0) : (1 << 1);
-    
-    // Clear interrupt - Write 1 to clear
-    SET_REG_BITS(HWREG32(timg_base + 0xA4), clr_bit);  // TIMG_INT_CLR_REG
-    
-    // Re-enable alarm
-    SET_REG_BITS(REG_TIMER_CONFIG(timer), REG_TIMER_CONFIG_ALARM_EN_BIT);
-    
-    // Just set a flag - do nothing else!
-    led_test_flag_timer = 1;
-    */
+	return;
+}
+
+
+void IRAM_ATTR driver_tmr_isr_system_counter(void *arg){
+	
+	// Se limpia la interrupción:
+	WRITE_REG(
+		REG_TIMG_N_INT_CLR(REG_TIMG_1_BASE), 
+		REG_TIMG_INT_T1_INT_CLR
+	);
+	
+	// Se rehabilita la alarma del timer manualmente:
+	SET_REG_BITS(
+		REG_TIMER_CONFIG(REG_TIMG_1_T1_BASE), 
+		REG_TIMER_CONFIG_ALARM_EN_BIT
+	);
+	
+	// Se fuerza la actualización:
+	WRITE_REG(
+		REG_TIMER_UPDATE(REG_TIMG_1_T1_BASE), 0x1
+	);
 	
 	return;
 }
@@ -283,6 +255,13 @@ void driver_timer_init(timer_e timer, uint16_t prescaler, bool incremental, bool
 	
 	// **** Paso 7: Se habilita el timer:
 	
+	SET_REG_BITS(
+		REG_TIMER_CONFIG(timer_base_reg), 
+		REG_TIMER_CONFIG_EN_BIT
+	);
+	
+	// Debuggeo:
+	/*
 	printf("Timer base: %p\n", timer_base_reg);
 	printf("UPDATE reg: %p\n", REG_TIMER_UPDATE(timer_base_reg));
 	printf("Expected: %p\n", (void*)((uint32_t)timer_base_reg + 0x0C));
@@ -295,13 +274,10 @@ void driver_timer_init(timer_e timer, uint16_t prescaler, bool incremental, bool
 		(unsigned int)READ_REG(REG_TIMER_CONFIG(timer_base_reg))
 	);
 	
-	SET_REG_BITS(
-		REG_TIMER_CONFIG(timer_base_reg), 
-		REG_TIMER_CONFIG_EN_BIT
-	);
-	
 	printf("Timer %d configured.\n", (int)timer);
+	*/
 	
+	timers_in_use |= (1 << timer);
 	
 	return;
 }
@@ -357,5 +333,71 @@ uint64_t driver_timer_get_counter(timer_e timer){
 }
 
 
+
+bool driver_timer_is_timer_in_use(timer_e timer){
+	
+	bool is_timer_enabled = false;
+	
+	switch(timer){
+		case TIMG_0_TIMER_0:
+			is_timer_enabled = READ_REG_BIT(
+				REG_TIMER_CONFIG(REG_TIMG_0_T0_BASE), 
+				REG_TIMER_CONFIG_EN_BIT
+			); 
+			break;
+			
+		case TIMG_0_TIMER_1:
+			is_timer_enabled = READ_REG_BIT(
+				REG_TIMER_CONFIG(REG_TIMG_0_T1_BASE), 
+				REG_TIMER_CONFIG_EN_BIT
+			); 
+			break;
+			
+		case TIMG_1_TIMER_0:
+			is_timer_enabled = READ_REG_BIT(
+				REG_TIMER_CONFIG(REG_TIMG_1_T0_BASE), 
+				REG_TIMER_CONFIG_EN_BIT
+			); 
+			break;
+			
+		case TIMG_1_TIMER_1: 
+			is_timer_enabled = READ_REG_BIT(
+				REG_TIMER_CONFIG(REG_TIMG_1_T1_BASE), 
+				REG_TIMER_CONFIG_EN_BIT
+			); 
+			break;
+		
+		default:
+			return 0;
+	}
+	
+	if(is_timer_enabled){
+		timers_in_use |= (1 << timer);
+		return true;
+	}
+	else{
+		timers_in_use &= ~(1 << timer);
+		return false;
+	}
+}
+
+
+// Función para obtener conteo en microsegundos desde el inicio del sistema:
+uint64_t driver_timer_microseconds(void){
+	
+	if(driver_timer_is_timer_in_use(TIMG_1_TIMER_1))
+		return driver_timer_get_counter(TIMG_1_TIMER_1);
+	
+	driver_timer_init(
+		TIMG_1_TIMER_1, 
+		80, 
+		true, 
+		true, 
+		0xFFFFFFFFFFFFFFFFULL,
+		driver_tmr_isr_system_counter
+	);
+	
+	return 0;
+}
 
 
