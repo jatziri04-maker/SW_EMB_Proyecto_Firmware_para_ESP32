@@ -59,8 +59,12 @@ typedef enum{
 /**************************************************************************/
 // **** Variables globales:
 
+extern uint8_t timers_in_use;
+
 extern uint8_t led_test_flag_timer;
 extern uint64_t counted_ticks;
+
+
 
 
 /**************************************************************************/
@@ -68,12 +72,20 @@ extern uint64_t counted_ticks;
 
 // ISR default:
 void IRAM_ATTR driver_tmr_isr_handler_wrapper(void *arg);
+void IRAM_ATTR driver_tmr_isr_system_counter(void *arg);
 
 // Función para inicializar timer:
 void driver_timer_init(timer_e timer, uint16_t prescaler, bool incremental, bool self_reload, uint64_t count_of_alarm_triggering, void (*isr_handler_ptr)(void *args));
 
 // Funciones para leer aspectos del timer:
 uint64_t driver_timer_get_counter(timer_e timer);
+bool driver_timer_is_timer_in_use(timer_e timer);	
+
+
+// Función para obtener conteo en microsegundos desde el inicio del sistema:
+uint64_t driver_timer_microseconds(void);
+
+
 
 
 

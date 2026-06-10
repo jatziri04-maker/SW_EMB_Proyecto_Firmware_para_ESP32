@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include "hal_gpio.h"
 #include "hal_button.h"
+#include "hal_led.h"
 
 
 // **** Secciones del archivo:
@@ -36,7 +37,7 @@
 
 // Pines de salidas:
 #define LED_2		2
-#define LED_STATE_4	4
+#define LED_4		4
 #define LED_5		5
 #define LED_16		16
 #define LED_17		17
