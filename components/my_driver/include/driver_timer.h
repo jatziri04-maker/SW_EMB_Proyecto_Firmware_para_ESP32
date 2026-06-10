@@ -67,13 +67,13 @@ extern uint64_t counted_ticks;
 // **** Funciones para configurar timers:
 
 // ISR default:
-void IRAM_ATTR timer_isr_handler_wrapper(void *arg);
+void IRAM_ATTR driver_tmr_isr_handler_wrapper(void *arg);
 
 // Función para inicializar timer:
-void timer_init(timer_e timer, uint16_t prescaler, bool incremental, bool self_reload, uint64_t count_of_alarm_triggering, void (*isr_handler_ptr)(void *args));
+void driver_timer_init(timer_e timer, uint16_t prescaler, bool incremental, bool self_reload, uint64_t count_of_alarm_triggering, void (*isr_handler_ptr)(void *args));
 
 // Funciones para leer aspectos del timer:
-uint64_t timer_get_counter(timer_e timer);
+uint64_t driver_timer_get_counter(timer_e timer);
 
 
 

@@ -38,18 +38,18 @@ extern uint64_t inverted_gpios;
 // **** Prototipos de funciones:
 
 // Funciones para configurar GPIOs como salidas binarias normales:
-void gpio_config_out(uint8_t gpio_num, uint8_t invert_logic);
-void gpio_config_out_bits(uint32_t gpio_bits);
+void driver_gpio_config_out(uint8_t gpio_num, uint8_t invert_logic);
+void driver_gpio_config_out_bits(uint32_t gpio_bits);
 
 // Funciones para configurar GPIOs como entradas binarias normales:
-void gpio_config_in(uint8_t gpio_num, gpio_mode_e pull_mode, uint8_t invert_logic);
-void gpio_config_in_bits(uint32_t gpio_bits, gpio_mode_e pull_mode);
+void driver_gpio_config_in(uint8_t gpio_num, gpio_mode_e pull_mode, uint8_t invert_logic);
+void driver_gpio_config_in_bits(uint32_t gpio_bits, gpio_mode_e pull_mode);
 
 // Funciones para leer y escribir en pines GPIO compatibles:
-uint8_t gpio_read(uint8_t gpio_num);
-void	gpio_write(uint8_t gpio_num, uint8_t state);
-uint8_t	gpio_toggle(uint8_t gpio_num);
-uint8_t has_inverted_logic(uint8_t gpio_num);
+uint8_t driver_gpio_read(uint8_t gpio_num);
+void	driver_gpio_write(uint8_t gpio_num, uint8_t state);
+uint8_t	driver_gpio_toggle(uint8_t gpio_num);
+uint8_t driver_has_inverted_logic(uint8_t gpio_num);
 
 
 
